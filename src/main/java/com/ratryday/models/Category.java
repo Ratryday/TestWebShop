@@ -10,6 +10,9 @@ public class Category {
     private int categoryId;
     private String categoryName;
 
+    public Category() {
+    }
+
     public Category(Integer categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;

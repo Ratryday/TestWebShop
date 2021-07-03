@@ -1,7 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!--/*@thymesVar id="category" type="com.ratryday.models.Category"*/-->
-    <title th:text="${category}"></title>
+    <title th:text="${category.categoryName}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
