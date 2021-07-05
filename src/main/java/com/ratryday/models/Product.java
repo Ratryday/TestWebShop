@@ -26,6 +26,14 @@ public class Product {
         this.productDescription = productDescription;
     }
 
+    public Product(int categoryId, int productPrice, String productName, String productImage, String productDescription) {
+        this.categoryId = categoryId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productImage = productImage;
+        this.productDescription = productDescription;
+    }
+
     @Override
     public String toString() {
         return "Product{productName = " + productName + ", productPrice = " + productPrice + '}';
