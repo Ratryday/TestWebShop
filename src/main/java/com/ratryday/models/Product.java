@@ -3,36 +3,29 @@ package com.ratryday.models;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+import java.util.List;
+
 @Getter
 @Setter
+@Entity
 public class Product {
 
-    private int productId;
-    private int categoryId;
-    private int productPrice;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long productId;
+
+    private Double productPrice;
     private String productName;
     private String productImage;
     private String productDescription;
 
-    public Product() {
-    }
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoryId")
+    private Category category;
 
-    public Product(int productId, int categoryId, int productPrice, String productName, String productImage, String productDescription) {
-        this.productId = productId;
-        this.categoryId = categoryId;
-        this.productName = productName;
-        this.productPrice = productPrice;
-        this.productImage = productImage;
-        this.productDescription = productDescription;
-    }
-
-    public Product(int categoryId, int productPrice, String productName, String productImage, String productDescription) {
-        this.categoryId = categoryId;
-        this.productName = productName;
-        this.productPrice = productPrice;
-        this.productImage = productImage;
-        this.productDescription = productDescription;
-    }
+    @OneToMany(mappedBy = "product")
+    private List<CartEntry> cartEntry;
 
     @Override
     public String toString() {

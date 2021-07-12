@@ -5,6 +5,7 @@
 </head>
 <body>
 <h2>Hello World!</h2>
+<p th:text="${allCategory}"></p>
 <div th:each="category : ${allCategory}">
     <form method="get" action="/products">
         <input type="hidden" name="categoryId" th:value="${categoryId}">

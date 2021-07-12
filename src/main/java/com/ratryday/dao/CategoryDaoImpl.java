@@ -1,126 +1,57 @@
 package com.ratryday.dao;
 
-import com.ratryday.controllers.ConnectionPool;
 import com.ratryday.models.Category;
+import com.ratryday.models.Product;
+import org.apache.commons.collections4.CollectionUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ratryday.controllers.Constants.*;
-
+@Repository
+@Transactional
 public class CategoryDaoImpl implements CategoryDao {
 
-    private ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private Category category = new Category();
+    private final SessionFactory sessionFactory;
+
+    private Session session;
+
+    @Autowired
+    public CategoryDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public List<Category> select() {
-        List<Category> categoryList = new ArrayList<>();
-        Connection connection = connectionPool.getConnection();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_CATEGORY);
-            while (resultSet.next()) {
-                int categoryId = resultSet.getInt(1);
-                String categoryName = resultSet.getString(2);
-                category = new Category(categoryId, categoryName);
-                categoryList.add(category);
-            }
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
-            }
-        }
-        return categoryList;
+        session = this.sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Category.class);
+        return criteria.list();
     }
 
     @Override
     public Category selectOne(int id) {
-        Connection connection = connectionPool.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ONE_CATEGORY);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                int categoryId = resultSet.getInt(1);
-                String categoryName = resultSet.getString(2);
-                category = new Category(categoryId, categoryName);
-            }
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
-            }
-        }
-        return category;
+        session = this.sessionFactory.getCurrentSession();
+        return null;
     }
 
     @Override
     public boolean insert(Category category) {
-        Connection connection = connectionPool.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CATEGORY);
-            preparedStatement.setString(1, category.getCategoryName());
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
-            }
-        }
         return false;
     }
 
     @Override
     public boolean update(Category category) {
-        Connection connection = connectionPool.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CATEGORY);
-            preparedStatement.setString(1, category.getCategoryName());
-            preparedStatement.setInt(2, category.getCategoryId());
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
-            }
-        }
         return false;
     }
 
     @Override
     public boolean delete(int id) {
-        Connection connection = connectionPool.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CATEGORY);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
-            }
-        }
         return false;
     }
 

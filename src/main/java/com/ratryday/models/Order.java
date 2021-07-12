@@ -3,24 +3,33 @@ package com.ratryday.models;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+import java.util.List;
+
 @Getter
 @Setter
+@Entity
 public class Order {
 
-    private int orderId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long orderId;
+
     private int phoneNumber;
     private String mailAddress;
     private String customerName;
     private String customerSurname;
 
-    public Order() {
-    }
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
+    private List<CartEntry> cartEntryList;
 
-    public Order(int orderId, int phoneNumber, String mailAddress, String customerName, String customerSurname) {
-        this.orderId = orderId;
-        this.phoneNumber = phoneNumber;
-        this.mailAddress = mailAddress;
-        this.customerName = customerName;
-        this.customerSurname = customerSurname;
+    @Override
+    public String toString() {
+        return "Order{" +
+                ", phoneNumber=" + phoneNumber +
+                ", mailAddress='" + mailAddress + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", customerSurname='" + customerSurname + '\'' +
+                '}';
     }
 }

@@ -1,30 +1,28 @@
 package com.ratryday.dao;
 
-import com.ratryday.models.Order;
-import org.springframework.stereotype.Component;
+import com.ratryday.models.CartEntry;
 
 import java.util.List;
 
-@Component
-public class OrderDaoImpl implements OrderDao {
+public class CartEntryDaoImpl implements CartEntryDao {
 
     @Override
-    public List<Order> select() {
+    public List<CartEntry> select() {
         return null;
     }
 
     @Override
-    public Order selectOne(int id) {
+    public CartEntry selectOne(int id) {
         return null;
     }
 
     @Override
-    public boolean insert(Order order) {
+    public boolean insert(CartEntry cartEntry) {
         return false;
     }
 
     @Override
-    public boolean update(Order order) {
+    public boolean update(CartEntry cartEntry) {
         return false;
     }
 
@@ -35,7 +33,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean clear() {
-        // not sure that I will add this
         return false;
     }
 
