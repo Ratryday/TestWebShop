@@ -1,16 +1,21 @@
 package com.ratryday.services;
 
 import com.ratryday.dao.ProductDao;
-import com.ratryday.dao.ProductDaoImpl;
 import com.ratryday.models.Product;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 public class ProductServices {
 
-    private ProductDao productDao = new ProductDaoImpl();
+    private final ProductDao productDao;
+
+    @Autowired
+    public ProductServices(ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
     public boolean create(){
         return false;

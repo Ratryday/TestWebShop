@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "product")
 public class Product {
 
     @Id
@@ -20,15 +21,11 @@ public class Product {
     private String productImage;
     private String productDescription;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "categoryId")
     private Category category;
 
     @OneToMany(mappedBy = "product")
     private List<CartEntry> cartEntry;
 
-    @Override
-    public String toString() {
-        return "Product{productName = " + productName + ", productPrice = " + productPrice + '}';
-    }
 }

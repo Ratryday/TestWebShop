@@ -1,9 +1,11 @@
 package com.ratryday.dao;
 
 import com.ratryday.models.CartEntry;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface CartEntryDao {
 
     List<CartEntry> select();

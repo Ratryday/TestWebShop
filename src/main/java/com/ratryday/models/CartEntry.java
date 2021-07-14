@@ -9,12 +9,13 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-
 public class CartEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long cartEntryId;
+
+    private int productCount;
 
     @ManyToOne()
     @JoinColumn(name = "cartId")
@@ -24,6 +25,8 @@ public class CartEntry {
     @JoinColumn(name = "productId")
     private Product product;
 
-    private int productCount;
+    @ManyToOne()
+    @JoinColumn(name = "id")
+    private Order order;
 
 }

@@ -26,7 +26,7 @@ public class ProductController {
     @GetMapping("/")
     public String indexPage(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
-            model.addAttribute("allCategory", "There are no categories here.");
+            model.addAttribute("massage", "There are no categories here.");
             return "index";
         }
         model.addAttribute("allCategory", categoryServices.getCategoryList());

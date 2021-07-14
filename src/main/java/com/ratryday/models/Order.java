@@ -9,27 +9,19 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderId;
+    private Long id;
 
     private int phoneNumber;
     private String mailAddress;
     private String customerName;
     private String customerSurname;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order")
     private List<CartEntry> cartEntryList;
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                ", phoneNumber=" + phoneNumber +
-                ", mailAddress='" + mailAddress + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", customerSurname='" + customerSurname + '\'' +
-                '}';
-    }
 }

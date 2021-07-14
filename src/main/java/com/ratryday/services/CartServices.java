@@ -1,11 +1,11 @@
 package com.ratryday.services;
 
 import com.ratryday.models.Cart;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 public class CartServices {
 
     public boolean create(){

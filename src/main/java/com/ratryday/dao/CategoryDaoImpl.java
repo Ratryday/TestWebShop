@@ -6,12 +6,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -19,7 +18,6 @@ import java.util.List;
 public class CategoryDaoImpl implements CategoryDao {
 
     private final SessionFactory sessionFactory;
-
     private Session session;
 
     @Autowired
@@ -37,21 +35,31 @@ public class CategoryDaoImpl implements CategoryDao {
     @Override
     public Category selectOne(int id) {
         session = this.sessionFactory.getCurrentSession();
-        return null;
+        Criteria criteria = session.createCriteria(Category.class);
+        criteria.add(Restrictions.eq("categoryId", id));
+        return (Category) criteria.uniqueResult();
     }
 
     @Override
     public boolean insert(Category category) {
-        return false;
+        session = this.sessionFactory.getCurrentSession();
+        session.save(category);
+        return true;
     }
 
     @Override
     public boolean update(Category category) {
-        return false;
+        session = this.sessionFactory.getCurrentSession();
+        session.update(category);
+        return true;
     }
 
     @Override
     public boolean delete(int id) {
+        session = this.sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Category.class);
+        criteria.add(Restrictions.eq("categoryId", id));
+        session.delete(criteria);
         return false;
     }
 

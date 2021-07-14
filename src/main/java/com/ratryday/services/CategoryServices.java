@@ -3,13 +3,12 @@ package com.ratryday.services;
 import com.ratryday.dao.CategoryDao;
 import com.ratryday.models.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.List;
 
-@Service
+@Component
 @Transactional
 public class CategoryServices {
 
@@ -20,8 +19,9 @@ public class CategoryServices {
         this.categoryDao = categoryDao;
     }
 
-    public boolean create() {
-        return false;
+    public boolean create(String categoryName) {
+
+        return categoryDao.insert(new Category(categoryName));
     }
 
     public boolean delete() {

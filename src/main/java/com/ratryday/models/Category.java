@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "category")
 public class Category {
 
     @Id
@@ -17,21 +18,14 @@ public class Category {
 
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category")
     private List<Product> productList;
 
-    public Category(Long categoryId, String categoryName, List<Product> productList) {
-        this.categoryId = categoryId;
+    public Category(String categoryName) {
         this.categoryName = categoryName;
-        this.productList = productList;
     }
 
     public Category() {
-
     }
 
-    @Override
-    public String toString() {
-        return "Category{" + "categoryId = " + categoryId + ", categoryName = " + categoryName + '}';
-    }
 }
