@@ -8,7 +8,7 @@
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
-<form method="post" th:action="@{/login}">
+<form method="post" action="/login">
     <div>
         <label> Admin Name : <input type="text" name="adminName"/></label>
     </div>

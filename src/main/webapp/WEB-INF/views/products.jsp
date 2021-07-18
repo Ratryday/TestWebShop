@@ -4,18 +4,31 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<h2>Hello</h2>
+<h2>Products</h2>
 <div th:each="product : ${allProducts}">
     <form method="get" action="/product">
-        <label>Product name</label>
-        <p th:text="${product.productName}"></p>
-        <label>Product Price</label>
-        <p th:text="${product.productPrice}"></p>
-        <label>Product Image</label>
-        <p th:text="${product.productImage}"></p>
-        <input type="hidden" name="productId" th:value="${product.productId}">
-        <input type="submit" value="Open description">
+        <table>
+            <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+            <input type="hidden" name="productId" th:value="${product.productId}">
+            <tr>
+                <td><img th:src="${product.productImage}" width="240" height="180"></td>
+            </tr>
+            <tr>
+                <td>Product name</td>
+                <td><p th:text="${product.productName}"></p></td>
+            </tr>
+            <tr>
+                <td>Product price</td>
+                <td><p th:text="${product.productPrice}"></p></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Open description"></td>
+            </tr>
+        </table>
     </form>
 </div>
+    <form method="get" action="/">
+        <input type="submit" value="Back to category list"/>
+    </form>
 </body>
 </html>

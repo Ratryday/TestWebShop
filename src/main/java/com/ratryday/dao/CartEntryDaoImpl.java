@@ -1,24 +1,51 @@
 package com.ratryday.dao;
 
+import com.ratryday.models.Cart;
 import com.ratryday.models.CartEntry;
+import com.ratryday.models.Product;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Repository
+@Transactional
 public class CartEntryDaoImpl implements CartEntryDao {
 
-    @Override
-    public List<CartEntry> select() {
-        return null;
+    private final SessionFactory sessionFactory;
+    private Session session;
+
+    @Autowired
+    public CartEntryDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public CartEntry selectOne(int id) {
-        return null;
+    public List<CartEntry> select() {
+        session = this.sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(CartEntry.class);
+        return criteria.list();
+    }
+
+    @Override
+    public CartEntry selectOne(Product product, Cart cart) {
+        session = this.sessionFactory.getCurrentSession();
+        Query query = session.createQuery("FROM CartEntry where product = :productParam and cart =:cartParam");
+        query.setParameter("productParam", product);
+        query.setParameter("cartParam", cart);
+        return (CartEntry) query.setMaxResults(1).uniqueResult();
     }
 
     @Override
     public boolean insert(CartEntry cartEntry) {
-        return false;
+        session = this.sessionFactory.getCurrentSession();
+        session.save(cartEntry);
+        return true;
     }
 
     @Override
@@ -27,12 +54,24 @@ public class CartEntryDaoImpl implements CartEntryDao {
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public boolean delete(List<CartEntry> cartEntryList) {
+        session = this.sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(CartEntry.class);
+        session.clear();
+        return true;
+    }
+
+    @Override
+    public boolean delete(Product product, Cart cart) {
+        session = this.sessionFactory.getCurrentSession();
+        CartEntry cartEntry = selectOne(product, cart);
+        session.delete(cartEntry);
+        return true;
     }
 
     @Override
     public boolean clear() {
+
         return false;
     }
 

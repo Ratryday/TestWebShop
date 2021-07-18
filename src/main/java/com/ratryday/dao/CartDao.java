@@ -1,22 +1,28 @@
 package com.ratryday.dao;
 
 import com.ratryday.models.Cart;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
+
 
 @Service
 public interface CartDao {
 
-    List<Cart> select();
+    Cart selectOne(Cart cart);
 
-    Cart selectOne(int id);
+    Cart selectOne(int cartId);
+
+    Cart selectOne(HttpSession httpSession);
 
     boolean insert(Cart cart);
 
+    boolean insert(HttpSession httpSession);
+
     boolean update(Cart cart);
 
-    boolean delete(int id);
+    boolean delete(Cart cart);
 
     boolean clear();
 

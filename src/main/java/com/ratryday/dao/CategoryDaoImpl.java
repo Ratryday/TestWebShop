@@ -1,8 +1,6 @@
 package com.ratryday.dao;
 
 import com.ratryday.models.Category;
-import com.ratryday.models.Product;
-import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -50,6 +48,10 @@ public class CategoryDaoImpl implements CategoryDao {
     @Override
     public boolean update(Category category) {
         session = this.sessionFactory.getCurrentSession();
+
+        session.save(selectOne(category.getCategoryId()));
+        session.evict(selectOne(category.getCategoryId()));
+
         session.update(category);
         return true;
     }
@@ -57,12 +59,12 @@ public class CategoryDaoImpl implements CategoryDao {
     @Override
     public boolean delete(int id) {
         session = this.sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(Category.class);
-        criteria.add(Restrictions.eq("categoryId", id));
-        session.delete(criteria);
-        return false;
+        session.delete(selectOne(id));
+        return true;
     }
 
+
+    // Delete all categories from database
     @Override
     public boolean clear() {
         // not sure that I will add this

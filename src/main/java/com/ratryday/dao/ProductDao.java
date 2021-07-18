@@ -9,13 +9,13 @@ import java.util.List;
 @Service
 public interface ProductDao {
 
-    List<Product> select(int categoryId);
+    List<Product> select(Category category);
 
     Product selectOne(int id);
 
     boolean insert(Product product);
 
-    boolean update(Product product);
+    boolean update(Product product, int productId);
 
     boolean delete(int id);
 

@@ -1,32 +1,76 @@
 package com.ratryday.models;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
 
-
-@Getter
-@Setter
 @Entity
 public class CartEntry {
 
     @Id
+    @Column(name = "cartEntryId", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long cartEntryId;
-
+    private int cartEntryId;
     private int productCount;
 
-    @ManyToOne()
+    @ManyToOne(targetEntity = Cart.class, cascade=CascadeType.ALL)
     @JoinColumn(name = "cartId")
     private Cart cart;
 
-    @ManyToOne()
-    @JoinColumn(name = "productId")
+    @ManyToOne
+    @JoinColumns(
+            {
+                    @JoinColumn(name = "productId", referencedColumnName = "productId"),
+                    @JoinColumn(name = "productName", referencedColumnName = "productName")
+            }
+    )
     private Product product;
 
-    @ManyToOne()
-    @JoinColumn(name = "id")
-    private Order order;
+    public int getCartEntryId() {
+        return cartEntryId;
+    }
 
+    public void setCartEntryId(int cartEntryId) {
+        this.cartEntryId = cartEntryId;
+    }
+
+    public int getProductCount() {
+        return productCount;
+    }
+
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public CartEntry(int productCount, Cart cart, Product product) {
+        this.productCount = productCount;
+        this.cart = cart;
+        this.product = product;
+    }
+
+    public CartEntry() {
+    }
+
+    @Override
+    public String toString() {
+        return "CartEntry{" +
+                "cartEntryId=" + cartEntryId +
+                ", productCount=" + productCount +
+                ", product=" + product +
+                '}';
+    }
 }

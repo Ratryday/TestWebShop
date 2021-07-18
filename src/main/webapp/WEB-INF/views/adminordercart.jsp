@@ -1,7 +1,6 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <title>Cart</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Order cart</title>
 </head>
 <body>
 <div>
@@ -19,13 +18,8 @@
         </tr>
         <tr>
             <td>
-                <form method="get" action="/">
-                    <input type="submit" value="Back to shop">
-                </form>
-            </td>
-            <td>
-                <form method="get" action="/order">
-                    <input type="submit" value="Buy">
+                <form method="get" action="/adminorders">
+                    <input type="submit" value="Back">
                 </form>
             </td>
         </tr>

@@ -1,9 +1,10 @@
 package com.ratryday.controllers;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import com.ratryday.models.Product;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.ratryday.services.CategoryServices;
 import com.ratryday.services.ProductServices;
@@ -35,8 +36,12 @@ public class ProductController {
 
     @GetMapping("/products")
     public String productList(@RequestParam("categoryId") int categoryId, Model model) {
-        model.addAttribute("allProducts", productServices.getProductList(categoryId));
         model.addAttribute("category", categoryServices.getCategory(categoryId));
+        if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
+            model.addAttribute("massage", "There are no products here.");
+            return "products";
+        }
+        model.addAttribute("allProducts", productServices.getProductList(categoryServices.getCategory(categoryId)));
         return "products";
     }
 

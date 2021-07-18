@@ -48,6 +48,8 @@ public class HibernateConf {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        hibernateProperties.setProperty("hibernate.classloading.use_current_tccl_as_parent", "false");
         return hibernateProperties;
     }
+
 }

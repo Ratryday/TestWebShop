@@ -1,10 +1,10 @@
 package com.ratryday.services;
 
-import com.ratryday.dao.CategoryDao;
-import com.ratryday.models.Category;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import com.ratryday.dao.CategoryDao;
+import com.ratryday.models.Category;
 
 import java.util.List;
 
@@ -20,24 +20,23 @@ public class CategoryServices {
     }
 
     public boolean create(String categoryName) {
-
         return categoryDao.insert(new Category(categoryName));
     }
 
-    public boolean delete() {
-        return false;
+    public boolean update(Category category) {
+        return categoryDao.update(category);
     }
 
-    public boolean update() {
-        return false;
+    public Category getCategory(int id) {
+        return categoryDao.selectOne(id);
     }
 
     public List<Category> getCategoryList() {
         return categoryDao.select();
     }
 
-    public Category getCategory(int id) {
-        return categoryDao.selectOne(id);
+    public boolean delete(int id) {
+        return categoryDao.delete(id);
     }
 
 }
