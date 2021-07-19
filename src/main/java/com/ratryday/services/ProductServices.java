@@ -42,7 +42,7 @@ public class ProductServices {
 
     public boolean update(double productPrice, String productName, MultipartFile imageFile,
                           String productDescription, Category category, int productId) throws IOException {
-        if(!StringUtils.isEmpty(imageFile.getOriginalFilename())) {
+        if (!StringUtils.isEmpty(imageFile.getOriginalFilename())) {
             String filePath = CreateOrUpdate(imageFile);
             productDao.update(new Product(productPrice, productName, filePath, productDescription, category), productId);
             return true;
@@ -55,6 +55,14 @@ public class ProductServices {
     private String CreateOrUpdate(MultipartFile imageFile) throws IOException {
         String realPath = "D:/Java/Projects/TestWebShop/src/main/webapp/WEB-INF/";
         String projectPath = "images/";
+        /*
+            There was another way how to find realPath
+
+            ServletContext context = request.getServletContext();
+            String path = context.getRealPath("/");
+
+            but it does not work with Tomcat, so I use absolut path
+        */
         String imageName = imageFile.getOriginalFilename();
         String filePath = projectPath + imageName;
         imageFile.transferTo(new File(realPath + projectPath + imageName));

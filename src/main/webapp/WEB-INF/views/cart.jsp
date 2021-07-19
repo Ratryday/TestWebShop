@@ -9,7 +9,7 @@
         <tr th:each="cartEntry : ${cart}">
             <td><p th:text="${cartEntry.product.productName}"></p></td>
             <td><p th:text="${cartEntry.productCount}"></p></td>
-            <td><p th:text="${cartEntry.product.productPrice * cartEntry.productCount}" ></p></td>
+            <td><p th:text="${cartEntry.product.productPrice * cartEntry.productCount}"></p></td>
             <td>
                 <form method="post" action="/clearcart">
                     <input type="hidden" name="productId" th:value="${cartEntry.product.productId}">
