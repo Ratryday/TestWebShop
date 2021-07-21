@@ -4,7 +4,7 @@
 </head>
 <body>
 <div>
-    <form method="post" action="/editproduct" enctype="multipart/form-data">
+    <form th:method="patch" action="/admin/product/edit" enctype="multipart/form-data">
         <table>
             <input type="hidden" name="categoryId" th:value="${categoryId}">
             <input type="hidden" name="productId" th:value="${product.productId}">
@@ -31,5 +31,9 @@
         </table>
     </form>
 </div>
+<form method="get" action="/admin/product/products">
+    <input type="hidden" name="categoryId" th:value="${categoryId}">
+    <input type="submit" value="Back to category list"/>
+</form>
 </body>
 </html>

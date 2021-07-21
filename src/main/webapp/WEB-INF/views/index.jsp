@@ -14,7 +14,7 @@
         <tr>
             <td><p th:text="${category.categoryName}"></p></td>
             <td>
-                <form method="get" action="/products" style="display:inline;">
+                <form method="get" action="/product/products" style="display:inline;">
                     <input type="hidden" name="categoryId" th:value="${category.categoryId}">
                     <input type="submit" value="Open products list">
                 </form>

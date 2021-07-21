@@ -1,6 +1,5 @@
 package com.ratryday.controllers;
 
-import com.ratryday.models.Product;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,8 +23,8 @@ public class ProductController {
         this.productServices = productServices;
     }
 
-    @GetMapping("/")
-    public String indexPage(Model model) {
+    @GetMapping
+    public String index(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
             model.addAttribute("massage", "There are no categories here.");
             return "index";
@@ -34,21 +33,21 @@ public class ProductController {
         return "index";
     }
 
-    @GetMapping("/products")
+    @GetMapping("/product/products")
     public String productList(@RequestParam("categoryId") int categoryId, Model model) {
         model.addAttribute("category", categoryServices.getCategory(categoryId));
         if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
             model.addAttribute("massage", "There are no products here.");
-            return "products";
+            return "product/products";
         }
         model.addAttribute("allProducts", productServices.getProductList(categoryServices.getCategory(categoryId)));
-        return "products";
+        return "product/products";
     }
 
     @GetMapping("/product")
     public String product(@RequestParam("productId") int productId, Model model) {
         model.addAttribute("product", productServices.getProduct(productId));
-        return "product";
+        return "product/product";
     }
 
 }

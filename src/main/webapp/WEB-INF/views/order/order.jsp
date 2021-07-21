@@ -5,7 +5,7 @@
 </head>
 <body>
 <div>
-    <form method="post" action="/buy">
+    <form method="post" action="/order/buy">
         <table>
             <tr>
                 <td><label text="Enter your name"></label></td>
@@ -29,5 +29,8 @@
         </table>
     </form>
 </div>
+<form method="get" action="/cart">
+    <input type="submit" value="Back to cart">
+</form>
 </body>
 </html>

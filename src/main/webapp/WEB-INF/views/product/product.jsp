@@ -22,7 +22,7 @@
             <td><p th:text="${product.productDescription}"></p></td>
         </tr>
         <tr>
-            <form method="post" action="/addtocart">
+            <form th:method="put" action="/cart/create">
                 <input type="hidden" name="productId" th:value="${product.productId}">
                 <td><input type="number" name="productCount"></td>
                 <td><input type="submit" value="Add to cart"></td>
@@ -35,7 +35,7 @@
 
         </tr>
         <tr>
-            <form method="get" action="/products">
+            <form method="get" action="/product/products">
                 <input type="hidden" name="categoryId" th:value="${product.category.categoryId}">
                 <input type="submit" value="Back to product list"/>
             </form>

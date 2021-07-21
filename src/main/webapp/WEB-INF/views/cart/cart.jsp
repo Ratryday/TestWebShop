@@ -11,7 +11,7 @@
             <td><p th:text="${cartEntry.productCount}"></p></td>
             <td><p th:text="${cartEntry.product.productPrice * cartEntry.productCount}"></p></td>
             <td>
-                <form method="post" action="/clearcart">
+                <form th:method="delete" action="/cart/delete">
                     <input type="hidden" name="productId" th:value="${cartEntry.product.productId}">
                     <input type="submit" value="Remove product">
                 </form>
@@ -24,7 +24,7 @@
                 </form>
             </td>
             <td>
-                <form method="get" action="/order">
+                <form method="get" action="/order/order">
                     <input type="submit" value="Buy">
                 </form>
             </td>

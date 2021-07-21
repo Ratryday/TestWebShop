@@ -1,20 +1,24 @@
 package com.ratryday.controllers;
 
-import com.ratryday.services.CartServices;
-import com.ratryday.services.OrderServices;
-import com.ratryday.services.ProductServices;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.ratryday.services.CategoryServices;
+import com.ratryday.services.ProductServices;
+import com.ratryday.services.OrderServices;
+import com.ratryday.services.CartServices;
 import com.ratryday.models.Category;
 import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Controller
+@Transactional
+@RequestMapping("/admin")
 public class AdminController {
 
     private final CategoryServices categoryServices;
@@ -23,74 +27,81 @@ public class AdminController {
     private final CartServices cartServices;
 
     @Autowired
-    public AdminController(CategoryServices categoryServices, ProductServices productServices, OrderServices orderServices, CartServices cartServices) {
+    public AdminController(CategoryServices categoryServices, ProductServices productServices,
+                           OrderServices orderServices, CartServices cartServices) {
         this.categoryServices = categoryServices;
         this.productServices = productServices;
         this.orderServices = orderServices;
         this.cartServices = cartServices;
     }
 
+    // Admin layer
     @PostMapping("/login")
     public String adminSingIn(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
             model.addAttribute("massage", "There are no categories here.");
-            return "admin";
+            return "admin/admin";
         }
         model.addAttribute("allCategory", categoryServices.getCategoryList());
-        return "admin";
+        return "admin/admin";
     }
 
-    @GetMapping("/admin")
+    @GetMapping()
     public String admin() {
-
-        return "login";
+        return "admin/login";
     }
 
-    @GetMapping("/addcategory")
-    public String addCategory() {
-        return "/addcategory";
+
+
+    // Category layer
+    @GetMapping("/category/create")
+    public String createCategory() {
+        return "admin/category/create";
     }
 
-    @PostMapping("/addcategory")
+    @PutMapping("/category/create")
     public String saveCategory(@RequestParam("categoryName") String categoryName, Model model) {
         categoryServices.create(categoryName);
         model.addAttribute("allCategory", categoryServices.getCategoryList());
-        return "/admin";
+        return "admin/admin";
     }
 
-    @GetMapping("/edit")
-    public String editGetCategory(@RequestParam int categoryId, Model model) {
+    @GetMapping("/category/edit")
+    public String editCategory(@RequestParam int categoryId, Model model) {
         model.addAttribute("category", categoryServices.getCategory(categoryId));
-        return "/editcategory";
+        return "admin/category/edit";
     }
 
-    @PostMapping("/edit")
-    public String editPostCategory(@RequestParam String categoryName, @RequestParam int categoryId, Model model) {
+    @PatchMapping("/category/edit")
+    public String updateCategory(@RequestParam String categoryName, @RequestParam int categoryId, Model model) {
         categoryServices.update(new Category(categoryId, categoryName));
         model.addAttribute("allCategory", categoryServices.getCategoryList());
-        return "admin";
+        return "admin/admin";
     }
 
-    @PostMapping("delete")
+    @DeleteMapping("/category/delete")
     public String deleteCategory(@RequestParam int categoryId, Model model) {
         categoryServices.delete(categoryId);
         model.addAttribute("allCategory", categoryServices.getCategoryList());
-        return "admin";
+        return "admin/admin";
     }
 
-    @GetMapping("/adminproducts")
+
+
+    // Product layer
+    @GetMapping("/product/products")
     public String productList(@RequestParam int categoryId, Model model) {
         return prepareForAdminProductsPage(categoryId, model);
     }
 
-    @GetMapping("/addproduct")
-    public String addGetProduct(@RequestParam int categoryId, Model model) {
+    @GetMapping("/product/create")
+    public String createProduct(@RequestParam int categoryId, Model model) {
         model.addAttribute("categoryId", categoryId);
-        return "/addproduct";
+        return "admin/product/create";
     }
 
-    @PostMapping("/addproduct")
-    public String addPostProduct(@RequestParam int categoryId, Model model, @RequestParam MultipartFile imageFile,
+    @PutMapping("/product/create")
+    public String saveProduct(@RequestParam int categoryId, Model model, @RequestParam MultipartFile imageFile,
                                  @RequestParam String productName, @RequestParam double productPrice,
                                  @RequestParam String productDescription) {
         try {
@@ -102,21 +113,19 @@ public class AdminController {
         return prepareForAdminProductsPage(categoryId, model);
     }
 
-    @GetMapping("/editproduct")
-    public String editGetProduct(@RequestParam int categoryId, @RequestParam int productId, Model model) {
+    @GetMapping("/product/edit")
+    public String editProduct(@RequestParam int categoryId, @RequestParam int productId, Model model) {
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("product", productServices.getProduct(productId));
-        return "/editproduct";
+        return "admin/product/edit";
     }
 
-    @PostMapping("/editproduct")
-    public String editPostProduct(@RequestParam int categoryId, Model model, @RequestParam MultipartFile imageFile,
+    @PatchMapping("/product/edit")
+    public String updateProduct(@RequestParam int categoryId, Model model, @RequestParam MultipartFile imageFile,
                                   @RequestParam String productName, @RequestParam double productPrice,
                                   @RequestParam String productDescription, @RequestParam int productId) {
         try {
-            System.out.println("Admin Controller");
-            productServices
-                    .update(productPrice, productName, imageFile, productDescription,
+            productServices.update(productPrice, productName, imageFile, productDescription,
                             categoryServices.getCategory(categoryId), productId);
         } catch (IOException e) {
             e.printStackTrace();
@@ -124,32 +133,48 @@ public class AdminController {
         return prepareForAdminProductsPage(categoryId, model);
     }
 
-    @PostMapping("/deleteproduct")
+    @DeleteMapping("/product/delete")
     public String deleteProduct(@RequestParam int categoryId, @RequestParam int productId, Model model) {
         productServices.delete(productId);
         return prepareForAdminProductsPage(categoryId, model);
     }
 
-    @GetMapping("/adminorders")
+
+
+    // Cart layer
+    @GetMapping("/cart/orders")
     public String orders(Model model) {
         model.addAttribute("allOrders", orderServices.getOrderList());
-        return "/adminorders";
+        return "admin/cart/orders";
     }
 
-    @GetMapping("/admincart")
+    @GetMapping("/cart/cartEntry")
     public String orderCart(@RequestParam int cartId, Model model) {
         model.addAttribute("cart", cartServices.getCart(cartId));
-        return "adminordercart";
+        return "admin/cart/cartEntry";
     }
 
+    @DeleteMapping("/cart/delete")
+    public String deleteCartEntryProduct(@RequestParam int productId, @RequestParam int cartId, Model model,
+                                         HttpSession httpSession) {
+        if(cartServices.deleteCartEntry(productServices.getProduct(productId), httpSession)) {
+            model.addAttribute("cart", cartServices.getCart(cartId));
+            return "/admin/cart/cartEntry";
+        }
+        model.addAttribute("message", "Fail deleting");
+        return "/admin/cart/cartEntry";
+    }
+
+    // Another methods
     private String prepareForAdminProductsPage(@RequestParam int categoryId, Model model) {
         model.addAttribute("category", categoryServices.getCategory(categoryId));
         if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
             model.addAttribute("massage", "There are no products here.");
-            return "adminproducts";
+            return "/admin/product/products";
         }
         model.addAttribute("allProducts", productServices.getProductList(categoryServices.getCategory(categoryId)));
-        return "/adminproducts";
+        return "/admin/product/products";
     }
 
 }
+

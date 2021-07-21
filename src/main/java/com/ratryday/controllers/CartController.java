@@ -16,6 +16,7 @@ import java.util.List;
 
 @Controller
 @Transactional
+@RequestMapping("/cart")
 public class CartController {
 
     private final CartServices cartServices;
@@ -27,28 +28,28 @@ public class CartController {
         this.productServices = productServices;
     }
 
-    @PostMapping("/addtocart")
-    public String addToCart(@RequestParam int productCount, @RequestParam int productId, Model model, HttpSession httpSession) {
-        cartServices.create(productCount, productServices.getProduct(productId), httpSession);
-        model.addAttribute("product", productServices.getProduct(productId));
-        return "product";
-    }
-
-    @GetMapping("/cart")
+    @GetMapping()
     public String cart(Model model, HttpSession httpSession) {
         if(CollectionUtils.isEmpty(cartServices.getCart(httpSession).getCartEntry())){
             model.addAttribute("message", "You do not add anything");
-            return "cart";
+            return "cart/cart";
         }
         List<CartEntry> cartEntryList = cartServices.getCart(httpSession).getCartEntry();
         model.addAttribute("cart", cartEntryList);
-        return "cart";
+        return "cart/cart";
     }
 
-    @PostMapping("/clearcart")
+    @PutMapping("/create")
+    public String addToCart(@RequestParam int productCount, @RequestParam int productId, Model model, HttpSession httpSession) {
+        cartServices.create(productCount, productServices.getProduct(productId), httpSession);
+        model.addAttribute("product", productServices.getProduct(productId));
+        return "product/product";
+    }
+
+    @DeleteMapping("/delete")
     public String clearCart(@RequestParam int productId, Model model, HttpSession httpSession) {
         cartServices.deleteCartEntry(productServices.getProduct(productId), httpSession);
-        return "/cart";
+        return "cart/cart";
     }
 
 }

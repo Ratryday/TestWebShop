@@ -14,13 +14,13 @@
             <td><p th:text="${order.phoneNumber}"></p></td>
             <td><p th:text="${order.mailAddress}"></p></td>
             <td>
-                <form method="get" action="/admincart" style="display:inline;">
+                <form method="get" action="/admin/cart/cartEntry" style="display:inline;">
                     <input type="hidden" name="cartId" th:value="${order.cartId}">
                     <input type="submit" name="category" value="Open products list">
                 </form>
             </td>
             <td>
-                <form method="post" action="/admin" style="display:inline;">
+                <form method="post" action="/admin/login" style="display:inline;">
                     <input type="submit" value="Back">
                 </form>
             </td>

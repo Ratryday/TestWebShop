@@ -7,12 +7,12 @@
 <h2>Admin Panel</h2>
 <p th:text="${massage}"></p>
 <div>
-    <form method="get" action="/addcategory">
+    <form method="get" action="/admin/category/create">
         <input type="submit" value="Add new category">
     </form>
 </div>
 <div>
-    <form method="get" action="/adminorders">
+    <form method="get" action="/admin/cart/orders">
         <input type="submit" value="Orders">
     </form>
 </div>
@@ -24,17 +24,17 @@
         <tr>
             <td><p th:text="${category.categoryName}"></p></td>
             <td>
-                <form method="get" action="/adminproducts" style="display:inline;">
+                <form method="get" action="/admin/product/products" style="display:inline;">
                     <input type="hidden" name="categoryId" th:value="${category.categoryId}">
                     <input type="submit" name="category" value="Open products list">
                 </form>
                 |
-                <form method="get" action="/edit" style="display:inline;">
+                <form method="get" action="/admin/category/edit" style="display:inline;">
                     <input type="hidden" name="categoryId" th:value="${category.categoryId}">
                     <input type="submit" value="Edit category">
                 </form>
                 |
-                <form method="post" action="/delete" style="display:inline;">
+                <form th:method="delete" action="/admin/category/delete" style="display:inline;">
                     <input type="hidden" name="categoryId" th:value="${category.categoryId}">
                     <input type="submit" value="Delete category">
                 </form>
