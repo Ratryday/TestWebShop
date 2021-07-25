@@ -6,14 +6,15 @@
 <body>
 <h2>Edit category</h2>
 <div>
-    <form th:method="patch" action="/admin/category/edit">
-        <label>Category name</label>
-        <input type="text" name="categoryName" th:value="${category.categoryName}">
-        <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+    <form th:method="post" action="/admin/category/edit" th:object="${category}">
+        <label for="categoryName">Category name</label>
+        <input type="text" id="categoryName" th:field="*{categoryName}">
+        <p style="color:red" th:if="${#fields.hasErrors('categoryName')}" th:errors="*{categoryName}">Name error</p>
+        <input type="hidden" th:field="*{categoryId}">
         <input type="submit" value="Edit">
     </form>
 </div>
-<form method="post" action="/admin/login">
+<form method="post" action="/admin">
     <input type="submit" value="Back to category list"/>
 </form>
 </body>

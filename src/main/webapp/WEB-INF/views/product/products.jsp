@@ -5,13 +5,19 @@
 </head>
 <body>
 <h2>Products</h2>
+<form method="get" action="/cart">
+    <input type="submit" value="Cart">
+</form>
+<form method="get" action="/user">
+    <input type="submit" value="Sing In">
+</form>
 <div th:each="product : ${allProducts}">
     <form method="get" action="/product">
         <table>
             <input type="hidden" name="categoryId" th:value="${category.categoryId}">
             <input type="hidden" name="productId" th:value="${product.productId}">
             <tr>
-                <td><img th:src="${product.productImage}" width="240" height="180"></td>
+                <td><img th:src="@{'/' + ${product.productImage}}" width="240" height="180"></td>
             </tr>
             <tr>
                 <td>Product name</td>

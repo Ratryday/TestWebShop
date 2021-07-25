@@ -6,13 +6,14 @@
 <body>
 <h2>Add new category</h2>
 <div>
-    <form th:method="put" action="/admin/category/create">
-        <label>Category name</label>
-        <input type="text" name="categoryName">
+    <form method="post" action="/admin/category" th:object="${category}">
+        <label for="name">Category name</label>
+        <input type="text" th:field="*{categoryName}" id="name">
+        <p style="color:red" th:if="${#fields.hasErrors('categoryName')}" th:errors="*{categoryName}">Name error</p>
         <input type="submit" value="Add">
     </form>
 </div>
-<form method="post" action="/admin/login">
+<form method="post" action="/admin">
     <input type="submit" value="Back to category list"/>
 </form>
 </body>

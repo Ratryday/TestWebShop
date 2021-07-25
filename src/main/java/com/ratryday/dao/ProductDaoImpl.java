@@ -41,6 +41,14 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
+    public boolean selectOne(String productName) {
+        session = this.sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Product.class);
+        criteria.add(Restrictions.eq("productName", productName));
+        return criteria.uniqueResult() != null;
+    }
+
+    @Override
     public boolean insert(Product product) {
         session = this.sessionFactory.getCurrentSession();
         session.save(product);
@@ -48,11 +56,10 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public boolean update(Product product, int productId) {
+    public boolean update(Product product) {
         session = this.sessionFactory.getCurrentSession();
-
-        product.setProductId(productId);
-        Product productFromDB = selectOne(productId);
+        System.out.println("Product Id = " + product.getProductId());
+        Product productFromDB = selectOne(product.getProductId());
         session.save(productFromDB);
         session.evict(productFromDB);
 

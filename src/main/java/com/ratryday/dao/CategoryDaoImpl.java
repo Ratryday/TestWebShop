@@ -39,6 +39,14 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
+    public boolean selectOne(String categoryName) {
+        session = this.sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Category.class);
+        criteria.add(Restrictions.eq("categoryName", categoryName));
+        return criteria.uniqueResult() != null;
+    }
+
+    @Override
     public boolean insert(Category category) {
         session = this.sessionFactory.getCurrentSession();
         session.save(category);

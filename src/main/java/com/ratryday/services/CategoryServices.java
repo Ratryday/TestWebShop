@@ -19,8 +19,8 @@ public class CategoryServices {
         this.categoryDao = categoryDao;
     }
 
-    public boolean create(String categoryName) {
-        return categoryDao.insert(new Category(categoryName));
+    public boolean create(Category category) {
+        return categoryDao.insert(category);
     }
 
     public boolean update(Category category) {
@@ -29,6 +29,10 @@ public class CategoryServices {
 
     public Category getCategory(int id) {
         return categoryDao.selectOne(id);
+    }
+
+    public boolean isExist(String categoryName){
+        return categoryDao.selectOne(categoryName);
     }
 
     public List<Category> getCategoryList() {

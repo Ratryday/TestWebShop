@@ -7,7 +7,7 @@
 <div>
     <table>
         <tr>
-            <td><img th:src="${product.productImage}" width="240" height="180"></td>
+            <td><img th:src="@{'/' + ${product.productImage}}" width="240" height="180"></td>
         </tr>
         <tr>
             <td>Product name</td>
@@ -22,10 +22,16 @@
             <td><p th:text="${product.productDescription}"></p></td>
         </tr>
         <tr>
-            <form th:method="put" action="/cart/create">
+            <form method="post" th:unless="${added}" action="/cart/new">
                 <input type="hidden" name="productId" th:value="${product.productId}">
-                <td><input type="number" name="productCount"></td>
+                <td><input type="number" name="productCount" min="1" value="1"></td>
                 <td><input type="submit" value="Add to cart"></td>
+            </form>
+        </tr>
+        <tr>
+            <form method="get" th:if="${added}" action="/cart">
+                <td><p>You already add this to cart</p></td>
+                <td><input type="submit" value="Go to cart"></td>
             </form>
         </tr>
         <tr>

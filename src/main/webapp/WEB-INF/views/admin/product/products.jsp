@@ -7,7 +7,7 @@
 <h2>Product list admin panel</h2>
 <p th:text="${massage}"></p>
 <div>
-    <form method="get" action="/admin/product/create">
+    <form method="get" action="/admin/product/new">
         <input type="hidden" name="categoryId" th:value="${category.categoryId}">
         <input type="submit" value="Add new product">
     </form>
@@ -35,7 +35,7 @@
         </tr>
     </div>
 </table>
-<form method="post" action="/admin/login">
+<form method="post" action="/admin">
     <input type="submit" value="Back to category list"/>
 </form>
 </body>

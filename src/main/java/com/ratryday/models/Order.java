@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -15,9 +17,17 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int orderId;
 
+    @NotEmpty(message = "Phone number should not be empty")
     private String phoneNumber;
+
+    @NotEmpty(message = "Mail address should not be empty")
+    @Email(message = "Email should be valid")
     private String mailAddress;
+
+    @NotEmpty(message = "Your name should not be empty")
     private String customerName;
+
+    @NotEmpty(message = "Your surname should not be empty")
     private String customerSurname;
 
     @OneToOne

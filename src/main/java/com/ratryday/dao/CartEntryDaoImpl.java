@@ -6,6 +6,7 @@ import com.ratryday.models.Product;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,11 +19,13 @@ import java.util.List;
 public class CartEntryDaoImpl implements CartEntryDao {
 
     private final SessionFactory sessionFactory;
+    private final CartDao cartDao;
     private Session session;
 
     @Autowired
-    public CartEntryDaoImpl(SessionFactory sessionFactory) {
+    public CartEntryDaoImpl(SessionFactory sessionFactory, CartDao cartDao) {
         this.sessionFactory = sessionFactory;
+        this.cartDao = cartDao;
     }
 
     @Override
@@ -57,7 +60,9 @@ public class CartEntryDaoImpl implements CartEntryDao {
     public boolean delete(List<CartEntry> cartEntryList) {
         session = this.sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(CartEntry.class);
-        session.clear();
+        for (CartEntry cartEntry : cartEntryList) {
+            session.delete(cartEntry);
+        }
         return true;
     }
 
@@ -65,7 +70,7 @@ public class CartEntryDaoImpl implements CartEntryDao {
     public boolean delete(Product product, Cart cart) {
         session = this.sessionFactory.getCurrentSession();
         CartEntry cartEntry = selectOne(product, cart);
-        session.delete(cartEntry);
+        session.remove(cartEntry);
         return true;
     }
 

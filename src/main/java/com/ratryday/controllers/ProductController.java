@@ -1,5 +1,7 @@
 package com.ratryday.controllers;
 
+import com.ratryday.models.CartEntry;
+import com.ratryday.services.CartServices;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.collections4.CollectionUtils;
@@ -9,31 +11,26 @@ import com.ratryday.services.CategoryServices;
 import com.ratryday.services.ProductServices;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpSession;
+
 
 @Controller
 @Transactional
+@RequestMapping("/product")
 public class ProductController {
 
     private final CategoryServices categoryServices;
     private final ProductServices productServices;
+    private final CartServices cartServices;
 
     @Autowired
-    public ProductController(CategoryServices categoryServices, ProductServices productServices) {
+    public ProductController(CategoryServices categoryServices, ProductServices productServices, CartServices cartServices) {
         this.categoryServices = categoryServices;
         this.productServices = productServices;
+        this.cartServices = cartServices;
     }
 
-    @GetMapping
-    public String index(Model model) {
-        if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
-            model.addAttribute("massage", "There are no categories here.");
-            return "index";
-        }
-        model.addAttribute("allCategory", categoryServices.getCategoryList());
-        return "index";
-    }
-
-    @GetMapping("/product/products")
+    @GetMapping("/products")
     public String productList(@RequestParam("categoryId") int categoryId, Model model) {
         model.addAttribute("category", categoryServices.getCategory(categoryId));
         if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
@@ -44,8 +41,15 @@ public class ProductController {
         return "product/products";
     }
 
-    @GetMapping("/product")
-    public String product(@RequestParam("productId") int productId, Model model) {
+    @GetMapping()
+    public String product(@RequestParam("productId") int productId, Model model, HttpSession httpSession) {
+        if (cartServices.getCart(httpSession) != null){
+            for (CartEntry cartEntry : cartServices.getCart(httpSession).getCartEntry()) {
+                if(cartEntry.getProduct().getProductId() == productId) {
+                    model.addAttribute("added", "added");
+                }
+            }
+        }
         model.addAttribute("product", productServices.getProduct(productId));
         return "product/product";
     }

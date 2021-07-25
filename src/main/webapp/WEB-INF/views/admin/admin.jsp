@@ -7,7 +7,7 @@
 <h2>Admin Panel</h2>
 <p th:text="${massage}"></p>
 <div>
-    <form method="get" action="/admin/category/create">
+    <form method="get" action="/admin/category/new">
         <input type="submit" value="Add new category">
     </form>
 </div>

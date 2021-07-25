@@ -2,8 +2,11 @@ package com.ratryday.models;
 
 import javax.persistence.*;
 import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+
 
 @Getter
 @Setter
@@ -14,9 +17,10 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int cartId;
+
     private String userId;
 
-    @OneToMany(targetEntity = CartEntry.class, mappedBy = "cart", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = CartEntry.class, mappedBy = "cart")
     private List<CartEntry> cartEntry;
 
     @OneToOne

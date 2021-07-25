@@ -12,6 +12,8 @@ public interface CategoryDao {
 
     Category selectOne(int id);
 
+    boolean selectOne(String categoryName);
+
     boolean insert(Category category);
 
     boolean update(Category category);

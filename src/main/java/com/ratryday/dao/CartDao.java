@@ -16,6 +16,8 @@ public interface CartDao {
 
     Cart selectOne(HttpSession httpSession);
 
+    Cart selectOne(String userId);
+
     boolean insert(Cart cart);
 
     boolean insert(HttpSession httpSession);

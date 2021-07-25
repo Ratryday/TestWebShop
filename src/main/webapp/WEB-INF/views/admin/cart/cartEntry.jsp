@@ -11,13 +11,6 @@
             <td><p th:text="${cartEntry.product.productName}"></p></td>
             <td><p th:text="${cartEntry.productCount}"></p></td>
             <td><p th:text="${cartEntry.product.productPrice * cartEntry.productCount}" ></p></td>
-            <td>
-                <form th:method="delete" action="/admin/cart/delete">
-                    <input type="hidden" name="productId" th:value="${cartEntry.product.productId}">
-                    <input type="hidden" name="cartId" th:value="${cart.cartId}">
-                    <input type="submit" value="Remove product">
-                </form>
-            </td>
         </tr>
         <tr>
             <td>

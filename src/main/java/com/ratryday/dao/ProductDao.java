@@ -13,9 +13,11 @@ public interface ProductDao {
 
     Product selectOne(int id);
 
+    boolean selectOne(String productName);
+
     boolean insert(Product product);
 
-    boolean update(Product product, int productId);
+    boolean update(Product product);
 
     boolean delete(int id);
 

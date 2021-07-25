@@ -12,6 +12,7 @@ import com.ratryday.services.CartServices;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -30,26 +31,43 @@ public class CartController {
 
     @GetMapping()
     public String cart(Model model, HttpSession httpSession) {
-        if(CollectionUtils.isEmpty(cartServices.getCart(httpSession).getCartEntry())){
+        if (cartServices.getCart(httpSession) == null) {
+            model.addAttribute("message", "You do not add anything");
+            return "cart/cart";
+        }
+        if (CollectionUtils.isEmpty(cartServices.getCart(httpSession).getCartEntry())) {
             model.addAttribute("message", "You do not add anything");
             return "cart/cart";
         }
         List<CartEntry> cartEntryList = cartServices.getCart(httpSession).getCartEntry();
+        BigDecimal totalProductPrice = BigDecimal.ZERO;
+        for (CartEntry cartEntry : cartEntryList) {
+            BigDecimal productPrice = cartEntry.getProduct().getProductPrice();
+            int productCount = cartEntry.getProductCount();
+            totalProductPrice = totalProductPrice.add(productPrice.multiply(new BigDecimal(productCount)));
+        }
+        model.addAttribute("totalProductPrice", totalProductPrice);
         model.addAttribute("cart", cartEntryList);
         return "cart/cart";
     }
 
-    @PutMapping("/create")
+    @PostMapping("/new")
     public String addToCart(@RequestParam int productCount, @RequestParam int productId, Model model, HttpSession httpSession) {
         cartServices.create(productCount, productServices.getProduct(productId), httpSession);
+        model.addAttribute("added", "added");
         model.addAttribute("product", productServices.getProduct(productId));
         return "product/product";
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public String clearCart(@RequestParam int productId, Model model, HttpSession httpSession) {
-        cartServices.deleteCartEntry(productServices.getProduct(productId), httpSession);
-        return "cart/cart";
+        if(cartServices.deleteCartEntry(productServices.getProduct(productId), httpSession)) {
+            if (cartServices.getCart(httpSession) == null) {
+                model.addAttribute("message", "You do not add anything");
+                return "cart/cart";
+            }
+        }
+        return "redirect:/cart";
     }
 
 }

@@ -5,23 +5,35 @@
 </head>
 <body>
 <div>
-    <form method="post" action="/order/buy">
+    <form method="post" action="/order/buy" th:object="${order}">
         <table>
             <tr>
-                <td><label text="Enter your name"></label></td>
-                <td><input type="text" name="customerName" value="Your name"></td>
+                <td><label for="customerName">Enter your name</label></td>
+                <td>
+                    <input type="text" id="customerName" th:field="*{customerName}" placeholder="Your name">
+                    <p style="color:red" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Name error</p>
+                </td>
             </tr>
             <tr>
-                <td><label text="Enter your surname"></label></td>
-                <td><input type="text" name="customerSurname" value="Your surname"></td>
+                <td><label for="customerSurname">Enter your surname</label></td>
+                <td>
+                    <input type="text" id="customerSurname" th:field="*{customerSurname}" placeholder="Your surname">
+                    <p style="color:red" th:if="${#fields.hasErrors('customerSurname')}" th:errors="*{customerSurname}">Surname error</p>
+                </td>
             </tr>
             <tr>
-                <td><label text="Enter your email"></label></td>
-                <td><input type="text" name="mailAddress" value="Your email"></td>
+                <td><label for="mailAddress">Enter your email</label></td>
+                <td>
+                    <input type="text" id="mailAddress" th:field="*{mailAddress}" placeholder="Your email">
+                    <p style="color:red" th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}">Email error</p>
+                </td>
             </tr>
             <tr>
-                <td><label text="Enter your phone number"></label></td>
-                <td><input type="text" name="phoneNumber" value="Your phone number"></td>
+                <td><label for="phoneNumber">Enter your phone number</label></td>
+                <td>
+                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" placeholder="Your phone number">
+                    <p style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone number error</p>
+                </td>
             </tr>
             <tr>
                 <td><input type="submit" value="Buy"></td>

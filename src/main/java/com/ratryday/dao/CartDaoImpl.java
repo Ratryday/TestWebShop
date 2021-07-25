@@ -28,7 +28,7 @@ public class CartDaoImpl implements CartDao {
     public Cart selectOne(Cart cart) {
         session = this.sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Cart.class);
-        criteria.add(Restrictions.eq("cart", cart));
+        criteria.add(Restrictions.eq("cartId", cart.getCartId()));
         return (Cart) criteria.uniqueResult();
     }
 
@@ -45,6 +45,14 @@ public class CartDaoImpl implements CartDao {
         session = this.sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Cart.class);
         criteria.add(Restrictions.eq("userId", httpSession.getId()));
+        return (Cart) criteria.uniqueResult();
+    }
+
+    @Override
+    public Cart selectOne(String userId) {
+        session = this.sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Cart.class);
+        criteria.add(Restrictions.eq("userId", userId));
         return (Cart) criteria.uniqueResult();
     }
 
@@ -77,6 +85,7 @@ public class CartDaoImpl implements CartDao {
     public boolean delete(Cart cart) {
         session = this.sessionFactory.getCurrentSession();
         session.delete(selectOne(cart));
+        session.flush();
         return true;
     }
 

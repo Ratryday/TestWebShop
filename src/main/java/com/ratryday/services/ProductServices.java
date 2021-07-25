@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+
 
 import com.ratryday.models.Category;
 import com.ratryday.dao.ProductDao;
@@ -23,16 +24,19 @@ import java.io.File;
 public class ProductServices {
 
     private final ProductDao productDao;
+    private final HttpServletRequest request;
 
     @Autowired
-    public ProductServices(ProductDao productDao) {
+    public ProductServices(ProductDao productDao, HttpServletRequest request) {
         this.productDao = productDao;
+        this.request = request;
     }
 
-    public boolean create(double productPrice, String productName, MultipartFile imageFile,
-                          String productDescription, Category category) throws IOException {
+    public boolean create(Product product, MultipartFile imageFile, Category category) throws IOException {
         String filePath = CreateOrUpdate(imageFile);
-        productDao.insert(new Product(productPrice, productName, filePath, productDescription, category));
+        product.setProductImage(filePath);
+        product.setCategory(category);
+        productDao.insert(product);
         return true;
     }
 
@@ -40,33 +44,32 @@ public class ProductServices {
         return productDao.delete(id);
     }
 
-    public boolean update(double productPrice, String productName, MultipartFile imageFile,
-                          String productDescription, Category category, int productId) throws IOException {
-        if (!StringUtils.isEmpty(imageFile.getOriginalFilename())) {
-            String filePath = CreateOrUpdate(imageFile);
-            productDao.update(new Product(productPrice, productName, filePath, productDescription, category), productId);
-            return true;
-        }
-        String filePath = getProduct(productId).getProductImage();
-        productDao.update(new Product(productPrice, productName, filePath, productDescription, category), productId);
+    public boolean isExist(String productName) {
+        return productDao.selectOne(productName);
+    }
+
+    public boolean update(Product product){
+        productDao.update(product);
+        return true;
+    }
+
+    public boolean update(Product product, MultipartFile imageFile, Category category) throws IOException {
+        String filePath = CreateOrUpdate(imageFile);
+        product.setProductImage(filePath);
+        product.setCategory(category);
+        productDao.update(product);
         return true;
     }
 
     private String CreateOrUpdate(MultipartFile imageFile) throws IOException {
-        String realPath = "D:/Java/Projects/TestWebShop/src/main/webapp/WEB-INF/";
         String projectPath = "images/";
-        /*
-            There was another way how to find realPath
-
-            ServletContext context = request.getServletContext();
-            String path = context.getRealPath("/");
-
-            but it does not work with Tomcat, so I use absolut path
-        */
-        String imageName = imageFile.getOriginalFilename();
-        String filePath = projectPath + imageName;
-        imageFile.transferTo(new File(realPath + projectPath + imageName));
-        return filePath;
+        String realPathToUploads = request.getServletContext().getRealPath(projectPath);
+        String orgName = imageFile.getOriginalFilename();
+        String filePath = realPathToUploads + orgName;
+        String imagePath = projectPath + orgName;
+        File dest = new File(filePath);
+        imageFile.transferTo(dest);
+        return imagePath;
     }
 
     public List<Product> getProductList(Category category) {

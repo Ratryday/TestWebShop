@@ -52,6 +52,10 @@ public class CartServices {
         return cartDao.selectOne(httpSession);
     }
 
+    public Cart getCart(String userId) {
+        return cartDao.selectOne(userId);
+    }
+
     public Cart getCart(int cartId) {
         return cartDao.selectOne(cartId);
     }
