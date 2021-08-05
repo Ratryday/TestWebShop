@@ -1,12 +1,12 @@
 package com.ratryday.controllers;
 
-import com.ratryday.services.CategoryServices;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Controller;
+import com.ratryday.services.CategoryServices;
+import org.springframework.ui.Model;
 
 @Controller
 @Transactional

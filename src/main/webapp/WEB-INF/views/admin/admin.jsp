@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Admin panel</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -6,6 +7,11 @@
 <body>
 <h2>Admin Panel</h2>
 <p th:text="${massage}"></p>
+<div>
+    <form action="/logout" method="post">
+            <input type="submit" value="Sign Out"/>
+    </form>
+</div>
 <div>
     <form method="get" action="/admin/category/new">
         <input type="submit" value="Add new category">

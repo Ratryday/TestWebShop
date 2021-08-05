@@ -23,27 +23,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/admin/login*").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/admin/login.jsp")
-                .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/admin.jsp", true)
-                .failureUrl("/login.html?error=true")
-                .failureHandler(authenticationFailureHandler())
+                .loginPage("/admin/login").successForwardUrl("/admin/login")
+                .permitAll()
                 .and()
-                .logout()
-                .logoutUrl("/perform_logout")
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler(logoutSuccessHandler());
+                .logout().logoutUrl("/logout")
+                .permitAll()
+                .and()
+                .csrf();
     }
 
     @Bean
@@ -59,13 +51,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.builder()
-                        .username("admin")
-                        .password("admin")
-                        .roles("ADMIN")
-                        .build()
-        );
+        User.UserBuilder users = User.withDefaultPasswordEncoder();
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+
+        manager.createUser(users
+                .username("admin")
+                .password("admin")
+                .roles("ADMIN")
+                .build());
+
+        return manager;
     }
 
 

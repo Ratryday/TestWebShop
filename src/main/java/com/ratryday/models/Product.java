@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -63,5 +64,24 @@ public class Product implements java.io.Serializable {
                 ", productDescription='" + productDescription + '\'' +
                 ", category=" + category +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return productId == product.productId
+                && Objects.equals(productPrice, product.productPrice)
+                && Objects.equals(productName, product.productName)
+                && Objects.equals(productImage, product.productImage)
+                && Objects.equals(productDescription, product.productDescription)
+                && Objects.equals(category, product.category)
+                && Objects.equals(cartEntry, product.cartEntry);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, productPrice, productName, productImage, productDescription, category, cartEntry);
     }
 }

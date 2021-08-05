@@ -62,7 +62,9 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/admin").setViewName("admin/admin");
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/admin/admin").setViewName("admin/admin");
+        registry.addViewController("/admin/login").setViewName("admin/login");
     }
 
     @Bean(name = "multipartResolver")

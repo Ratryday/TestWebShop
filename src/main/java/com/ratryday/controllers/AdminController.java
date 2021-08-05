@@ -53,8 +53,13 @@ public class AdminController {
         return "admin/admin";
     }
 
+    @PostMapping("/logout")
+    public String logout() {
+        return "index";
+    }
+
     @GetMapping()
-    public String admin() {
+    public String adminLogin() {
         return "admin/login";
     }
 

@@ -1,5 +1,6 @@
 package com.ratryday.config;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -20,12 +21,13 @@ public class SpringMvcDispatcherServletInitializer extends AbstractAnnotationCon
         return new Class[]{SpringConfig.class};
     }
 
+    @NotNull
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
 
-    @Override
+   /* @Override
     public void onStartup(ServletContext aServletContext) throws ServletException {
         super.onStartup(aServletContext);
         registerHiddenFieldFilter(aServletContext);
@@ -34,5 +36,5 @@ public class SpringMvcDispatcherServletInitializer extends AbstractAnnotationCon
     private void registerHiddenFieldFilter(ServletContext aContext) {
         aContext.addFilter("hiddenHttpMethodFilter",
                 new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null, true, "/*");
-    }
+    }*/
 }

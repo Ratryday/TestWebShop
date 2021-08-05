@@ -12,5 +12,9 @@
         <res-auth>Container</res-auth>
     </resource-ref>-->
 
+    <listener>
+        <listener-class>org.springframework.security.ui.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+
 </web-app>
 
