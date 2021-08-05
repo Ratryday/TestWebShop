@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import com.ratryday.services.CategoryServices;
 import org.springframework.ui.Model;
 
+import static com.ratryday.controllers.Constants.*;
+
 @Controller
 @Transactional
 public class IndexController {
@@ -22,10 +24,10 @@ public class IndexController {
     @GetMapping
     public String index(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
-            model.addAttribute("massage", "There are no categories here.");
-            return "index";
+            model.addAttribute(MASSAGE, String.format(MASSAGE_CONTENT, CATEGORIES));
+            return INDEX;
         }
-        model.addAttribute("allCategory", categoryServices.getCategoryList());
-        return "index";
+        model.addAttribute(ALL_CATEGORIES, categoryServices.getCategoryList());
+        return INDEX;
     }
 }

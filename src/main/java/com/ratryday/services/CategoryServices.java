@@ -2,13 +2,13 @@ package com.ratryday.services;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import com.ratryday.dao.CategoryDao;
 import com.ratryday.models.Category;
 
 import java.util.List;
 
-@Component
+@Service
 @Transactional
 public class CategoryServices {
 

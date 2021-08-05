@@ -9,9 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.ratryday.services.CategoryServices;
 import com.ratryday.models.Category;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
 import org.mockito.Spy;
+
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -28,14 +29,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(controllers = IndexController.class)
 class IndexControllerTest {
 
+    private static final String SLASH = "/";
+    private static final String INDEX = "index";
+    private static final String MASSAGE = "massage";
+    private static final String ALL_CATEGORY = "allCategory";
+    private static final String MASSAGE_CONTENT  = "There are no categories here.";
+
     private final MockMvc mockMvc;
 
     @MockBean
-    private final CategoryServices categoryServices;
+    private CategoryServices categoryServices;
 
     @Autowired
-    IndexControllerTest(CategoryServices categoryServices, MockMvc mockMvc) {
-        this.categoryServices = categoryServices;
+    IndexControllerTest(MockMvc mockMvc) {
         this.mockMvc = mockMvc;
     }
 
@@ -43,11 +49,11 @@ class IndexControllerTest {
      * For index() method I must check two situation:
      * - what addAttribute will add to model when categoryServices return null / list of categories
      * - does it return the correct view name as a String
-     */
+     * */
 
     @Test
     void indexCategoryServicesReturnNull() throws Exception {
-        when(categoryServices.getCategoryList()).thenReturn(new ArrayList<Category>());
+        when(categoryServices.getCategoryList()).thenReturn(new ArrayList<>());
 
         // Test that categoryServices.getCategoryList() return null
         assertEquals(new ArrayList<Category>(), categoryServices.getCategoryList());
@@ -55,11 +61,11 @@ class IndexControllerTest {
         /*
          * Test that method return correct view name as a String and that model.addAttribute()
          * add correct attribute to model
-         */
-        mockMvc.perform(get("/"))
+         * */
+        mockMvc.perform(get(SLASH))
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"))
-                .andExpect(model().attribute("massage", equalTo("There are no categories here.")));
+                .andExpect(view().name(INDEX))
+                .andExpect(model().attribute(MASSAGE, equalTo(MASSAGE_CONTENT)));
     }
 
     @Spy
@@ -79,11 +85,11 @@ class IndexControllerTest {
         /*
          * Test that method return correct view name as a String and that model.addAttribute()
          * add correct attribute to model
-         */
-        mockMvc.perform(get("/"))
+         * */
+        mockMvc.perform(get(SLASH))
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"))
-                .andExpect(model().attribute("allCategory", categoryServices.getCategoryList()));
+                .andExpect(view().name(INDEX))
+                .andExpect(model().attribute(ALL_CATEGORY, categoryServices.getCategoryList()));
     }
 
 }
