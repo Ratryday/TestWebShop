@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
- * IndexController have only one method whose task
+ * {@link IndexController} have only one method whose task
  * is to run the index.jsp page.
  */
 
@@ -38,7 +38,7 @@ class IndexControllerTest {
     private final MockMvc mockMvc;
 
     @MockBean
-    private CategoryServices categoryServices;
+    private CategoryServices categoryServicesMockBean;
 
     @Autowired
     IndexControllerTest(MockMvc mockMvc) {
@@ -47,16 +47,16 @@ class IndexControllerTest {
 
     /*
      * For index() method I must check two situation:
-     * - what addAttribute will add to model when categoryServices return null / list of categories
+     * - what addAttribute will add to model when categoryServices return empty list / list of categories
      * - does it return the correct view name as a String
      * */
 
     @Test
     void indexCategoryServicesReturnNull() throws Exception {
-        when(categoryServices.getCategoryList()).thenReturn(new ArrayList<>());
+        when(categoryServicesMockBean.getCategoryList()).thenReturn(new ArrayList<>());
 
         // Test that categoryServices.getCategoryList() return null
-        assertEquals(new ArrayList<Category>(), categoryServices.getCategoryList());
+        assertEquals(new ArrayList<>() ,categoryServicesMockBean.getCategoryList());
 
         /*
          * Test that method return correct view name as a String and that model.addAttribute()
@@ -77,10 +77,10 @@ class IndexControllerTest {
 
     @Test
     void indexCategoryServicesReturnListOfCategories() throws Exception {
-        when(categoryServices.getCategoryList()).thenReturn(spyListOfCategories);
+        when(categoryServicesMockBean.getCategoryList()).thenReturn(spyListOfCategories);
 
         // test that categoryServices.getCategoryList() return list of categories
-        assertNotNull(categoryServices.getCategoryList());
+        assertNotNull(categoryServicesMockBean.getCategoryList().get(0));
 
         /*
          * Test that method return correct view name as a String and that model.addAttribute()
@@ -89,7 +89,7 @@ class IndexControllerTest {
         mockMvc.perform(get(SLASH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(INDEX))
-                .andExpect(model().attribute(ALL_CATEGORY, categoryServices.getCategoryList()));
+                .andExpect(model().attribute(ALL_CATEGORY, categoryServicesMockBean.getCategoryList()));
     }
 
 }

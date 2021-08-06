@@ -1,3 +1,4 @@
+/*
 package com.ratryday.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,3 +24,4 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
 }
+*/

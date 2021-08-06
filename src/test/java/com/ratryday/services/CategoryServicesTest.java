@@ -6,18 +6,17 @@ import com.ratryday.models.Category;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 
 /**
- * CategoryServices must create, update, return one/list, check if exist and delete Category
+ * {@link CategoryServices}  must create, update, check if exist, delete and return one or list of Category
  */
 
 @WebMvcTest(CategoryServices.class)

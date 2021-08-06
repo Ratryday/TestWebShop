@@ -1,3 +1,4 @@
+/*
 package com.ratryday.config;
 
 import org.springframework.security.core.Authentication;
@@ -22,3 +23,4 @@ public class CustomLogoutSuccessHandler extends
         super.onLogoutSuccess(request, response, authentication);
     }
 }
+*/

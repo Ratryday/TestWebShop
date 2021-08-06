@@ -1,6 +1,5 @@
 package com.ratryday.controllers;
 
-import com.ratryday.models.CartEntry;
 import com.ratryday.services.CartServices;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +42,15 @@ public class ProductController {
 
     @GetMapping()
     public String product(@RequestParam("productId") int productId, Model model, HttpSession httpSession) {
-        if (cartServices.getCart(httpSession) != null){
-            for (CartEntry cartEntry : cartServices.getCart(httpSession).getCartEntry()) {
-                if(cartEntry.getProduct().getProductId() == productId) {
-                    model.addAttribute("added", "added");
-                }
+        System.out.println(cartServices.getCart(httpSession) != null);
+        if (cartServices.getCart(httpSession) != null) {
+            if (cartServices.getCart(httpSession).getCartEntry().stream()
+                    .anyMatch(cartEntry -> cartEntry.getProduct().getProductId() == productId)) {
+                model.addAttribute("added", "added");
             }
         }
         model.addAttribute("product", productServices.getProduct(productId));
+        System.out.println(productServices.getProduct(productId));
         return "product/product";
     }
 

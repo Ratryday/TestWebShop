@@ -1,3 +1,4 @@
+/*
 package com.ratryday.config;
 
 import org.springframework.context.annotation.Bean;
@@ -65,3 +66,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 }
+*/

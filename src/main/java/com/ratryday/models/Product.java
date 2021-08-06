@@ -54,17 +54,7 @@ public class Product implements java.io.Serializable {
         this.category = category;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
 
-                ", productPrice=" + productPrice +
-                ", productName='" + productName + '\'' +
-                ", productImage='" + productImage + '\'' +
-                ", productDescription='" + productDescription + '\'' +
-                ", category=" + category +
-                '}';
-    }
 
     @Override
     public boolean equals(Object o) {
