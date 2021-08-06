@@ -1,37 +1,32 @@
 package com.ratryday.controllers;
 
-import com.ratryday.models.Cart;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import com.ratryday.services.CategoryServices;
+import com.ratryday.services.ProductServices;
+import com.ratryday.services.CartServices;
+import org.junit.jupiter.api.BeforeEach;
 import com.ratryday.models.CartEntry;
 import com.ratryday.models.Category;
 import com.ratryday.models.Product;
-import com.ratryday.services.CartServices;
-import com.ratryday.services.CategoryServices;
-import com.ratryday.services.ProductServices;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import com.ratryday.models.Cart;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
  * {@link ProductController} responsible for products.
@@ -46,8 +41,10 @@ class ProductControllerTest {
     private Category testCategory;
     private CartEntry testCartEntry;
     private static final Integer TEST_ID = 0;
+    private static final String ADDED = "added";
     private static final String MASSAGE = "massage";
     private static final String PRODUCT = "product";
+    private static final String CATEGORY = "category";
     private static final String PRODUCT_ID = "productId";
     private static final String CATEGORY_ID = "categoryId";
     private static final String SLASH_PRODUCT = "/product";
@@ -100,18 +97,15 @@ class ProductControllerTest {
     @Test
     void productListWhenProductServicesReturnEmptyListOfProducts() throws Exception {
         when(categoryServicesMockBean.getCategory(TEST_ID)).thenReturn(testCategory);
-
         when(productServicesMockBean.getProductList(categoryServicesMockBean.getCategory(TEST_ID))).thenReturn(new ArrayList<>());
 
         assertEquals(new ArrayList<>(), productServicesMockBean.getProductList(categoryServicesMockBean.getCategory(TEST_ID)));
-
-        System.out.println(categoryServicesMockBean.getCategory(TEST_ID));
 
         mockMvc.perform(get(SLASH_PRODUCT_SLASH_PRODUCTS)
                         .param(CATEGORY_ID, String.valueOf(TEST_ID)))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PRODUCT_PRODUCTS))
-                .andExpect(model().attribute(PRODUCT, categoryServicesMockBean.getCategory(TEST_ID)))
+                .andExpect(model().attribute(CATEGORY, categoryServicesMockBean.getCategory(TEST_ID)))
                 .andExpect(model().attribute(MASSAGE, equalTo(MASSAGE_CONTENT)));
     }
 
@@ -133,7 +127,7 @@ class ProductControllerTest {
         mockMvc.perform(get(SLASH_PRODUCT_SLASH_PRODUCTS).param(CATEGORY_ID, String.valueOf(TEST_ID)))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PRODUCT_PRODUCTS))
-                .andExpect(model().attribute(PRODUCT, categoryServicesMockBean.getCategory(TEST_ID)))
+                .andExpect(model().attribute(CATEGORY, categoryServicesMockBean.getCategory(TEST_ID)))
                 .andExpect(model().attribute(ALL_PRODUCTS, productServicesMockBean
                         .getProductList(categoryServicesMockBean.getCategory(TEST_ID))));
     }
@@ -211,6 +205,8 @@ class ProductControllerTest {
         // Check that cartServices.getCart() return Cart
         when(cartServicesMockBean.getCart(mockHttpSession)).thenReturn(cart);
 
+        System.out.println(cartServicesMockBean.getCart(mockHttpSession) != null);
+
         assertNotNull(cartServicesMockBean.getCart(mockHttpSession));
 
         // If fiend product with the same product id in cart entry return true
@@ -220,7 +216,7 @@ class ProductControllerTest {
         mockMvc.perform(get(SLASH_PRODUCT).param(PRODUCT_ID, String.valueOf(TEST_ID)))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PRODUCT_PRODUCT))
-                .andExpect(model().attribute("added", equalTo("added")))
+                .andExpect(model().attribute(ADDED, ADDED))
                 .andExpect(model().attribute(PRODUCT, productServicesMockBean.getProduct(TEST_ID)));
     }
 }

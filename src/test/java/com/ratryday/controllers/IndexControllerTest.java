@@ -33,7 +33,7 @@ class IndexControllerTest {
     private static final String INDEX = "index";
     private static final String MASSAGE = "massage";
     private static final String ALL_CATEGORY = "allCategory";
-    private static final String MASSAGE_CONTENT  = "There are no categories here.";
+    private static final String MASSAGE_CONTENT = "There are no categories here.";
 
     private final MockMvc mockMvc;
 
@@ -56,7 +56,7 @@ class IndexControllerTest {
         when(categoryServicesMockBean.getCategoryList()).thenReturn(new ArrayList<>());
 
         // Test that categoryServices.getCategoryList() return null
-        assertEquals(new ArrayList<>() ,categoryServicesMockBean.getCategoryList());
+        assertEquals(new ArrayList<>(), categoryServicesMockBean.getCategoryList());
 
         /*
          * Test that method return correct view name as a String and that model.addAttribute()
