@@ -18,6 +18,7 @@ import com.ratryday.models.Product;
 import com.ratryday.models.Category;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -31,15 +32,17 @@ public class AdminController {
     private final CategoryServices categoryServices;
     private final ProductServices productServices;
     private final OrderServices orderServices;
+    private final HttpServletRequest request;
     private final CartServices cartServices;
 
     @Autowired
     public AdminController(CategoryServices categoryServices, ProductServices productServices,
-                           OrderServices orderServices, CartServices cartServices) {
+                           OrderServices orderServices, HttpServletRequest request, CartServices cartServices) {
         this.categoryServices = categoryServices;
         this.productServices = productServices;
         this.orderServices = orderServices;
         this.cartServices = cartServices;
+        this.request = request;
     }
 
     // Admin layer
@@ -147,7 +150,8 @@ public class AdminController {
             return "admin/product/create";
         }
         try {
-            productServices.create(product, imageFile, categoryServices.getCategory(categoryId));
+            productServices.create(product, imageFile, categoryServices.getCategory(categoryId),
+                    request.getServletContext().getRealPath("images/"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -180,7 +184,8 @@ public class AdminController {
             return "admin/product/edit";
         }
         try {
-            productServices.update(product, imageFile, categoryServices.getCategory(categoryId));
+            productServices.update(product, imageFile, categoryServices.getCategory(categoryId),
+                    request.getServletContext().getRealPath("images/"));
         } catch (IOException e) {
             e.printStackTrace();
         }

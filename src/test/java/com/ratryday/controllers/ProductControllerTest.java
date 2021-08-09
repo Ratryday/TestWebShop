@@ -58,8 +58,6 @@ class ProductControllerTest {
 
     @BeforeEach
     void setProductController() {
-        testCart = new Cart();
-
         testCategory = new Category();
 
         testProduct = new Product();
@@ -68,11 +66,10 @@ class ProductControllerTest {
 
         testCartEntry = new CartEntry();
         testCartEntry.setProduct(testProduct);
-
         List<CartEntry> cartEntryList = new ArrayList<>();
-
         cartEntryList.add(testCartEntry);
 
+        testCart = new Cart();
         testCart.setCartEntry(cartEntryList);
     }
 
@@ -82,13 +79,13 @@ class ProductControllerTest {
     private MockHttpSession mockHttpSession;
 
     @MockBean
-    private CategoryServices categoryServicesMockBean;
+    private CartServices cartServicesMockBean;
 
     @MockBean
     private ProductServices productServicesMockBean;
 
     @MockBean
-    private CartServices cartServicesMockBean;
+    private CategoryServices categoryServicesMockBean;
 
     @Autowired
     ProductControllerTest(MockMvc mockMvc) {

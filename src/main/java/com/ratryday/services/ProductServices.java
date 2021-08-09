@@ -11,23 +11,21 @@ import com.ratryday.models.Product;
 import java.io.File;
 import java.util.List;
 import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
 
 @Component
 @Transactional
 public class ProductServices {
 
     private final ProductDao productDao;
-    private final HttpServletRequest request;
+    private final static String PROJECT_PATH = "images/";
 
     @Autowired
-    public ProductServices(ProductDao productDao, HttpServletRequest request) {
+    public ProductServices(ProductDao productDao) {
         this.productDao = productDao;
-        this.request = request;
     }
 
-    public boolean create(Product product, MultipartFile imageFile, Category category) throws IOException {
-        String filePath = saveImage(imageFile);
+    public boolean create(Product product, MultipartFile imageFile, Category category, String realPathToUpload) throws IOException {
+        String filePath = saveImage(imageFile, realPathToUpload);
         product.setProductImage(filePath);
         product.setCategory(category);
         return productDao.insert(product);
@@ -41,28 +39,25 @@ public class ProductServices {
         return productDao.selectOne(productName);
     }
 
-    public boolean update(Product product, MultipartFile imageFile, Category category) throws IOException {
-        String filePath = saveImage(imageFile);
+    public boolean update(Product product, MultipartFile imageFile, Category category, String realPathToUploads) throws IOException {
+        String filePath = saveImage(imageFile, realPathToUploads);
         product.setProductImage(filePath);
         product.setCategory(category);
-        productDao.update(product);
-        return true;
-    }
-
-    public List<Product> getProductList(Category category) {
-        return productDao.select(category);
+        return productDao.update(product);
     }
 
     public Product getProduct(int id) {
         return productDao.selectOne(id);
     }
 
-    String saveImage(MultipartFile imageFile) throws IOException {
-        String projectPath = "images/";
-        String realPathToUploads = request.getServletContext().getRealPath(projectPath);
+    public List<Product> getProductList(Category category) {
+        return productDao.select(category);
+    }
+
+    private String saveImage(MultipartFile imageFile, String realPathToUploads) throws IOException {
         String orgName = imageFile.getOriginalFilename();
         String filePath = realPathToUploads + orgName;
-        String imagePath = projectPath + orgName;
+        String imagePath = PROJECT_PATH + orgName;
         File dest = new File(filePath);
         imageFile.transferTo(dest);
         return imagePath;
