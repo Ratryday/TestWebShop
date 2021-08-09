@@ -1,6 +1,5 @@
 package com.ratryday.controllers;
 
-import com.ratryday.services.CartServices;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.collections4.CollectionUtils;
@@ -8,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.ratryday.services.CategoryServices;
 import com.ratryday.services.ProductServices;
+import com.ratryday.services.CartServices;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
-
 
 @Controller
 @Transactional
@@ -42,7 +41,6 @@ public class ProductController {
 
     @GetMapping()
     public String product(@RequestParam("productId") int productId, Model model, HttpSession httpSession) {
-        System.out.println(cartServices.getCart(httpSession) != null);
         if (cartServices.getCart(httpSession) != null) {
             if (cartServices.getCart(httpSession).getCartEntry().stream()
                     .anyMatch(cartEntry -> cartEntry.getProduct().getProductId() == productId)) {
@@ -50,7 +48,6 @@ public class ProductController {
             }
         }
         model.addAttribute("product", productServices.getProduct(productId));
-        System.out.println(productServices.getProduct(productId));
         return "product/product";
     }
 
