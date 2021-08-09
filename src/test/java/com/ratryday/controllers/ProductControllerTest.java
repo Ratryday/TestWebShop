@@ -1,12 +1,10 @@
 package com.ratryday.controllers;
 
-import org.apache.catalina.session.StandardSessionFacade;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.jupiter.api.extension.ExtendWith;
 import com.ratryday.services.CategoryServices;
@@ -15,22 +13,21 @@ import com.ratryday.services.CartServices;
 import org.junit.jupiter.api.BeforeEach;
 import com.ratryday.models.CartEntry;
 import com.ratryday.models.Category;
+import org.springframework.ui.Model;
 import com.ratryday.models.Product;
 import org.junit.jupiter.api.Test;
 import com.ratryday.models.Cart;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.ui.Model;
 
-import java.util.List;
 import java.util.ArrayList;
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
-import static org.mockito.Mockito.when;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * {@link ProductController} responsible for products.
@@ -44,9 +41,9 @@ class ProductControllerTest {
     private Product testProduct;
     private Category testCategory;
     private CartEntry testCartEntry;
+    private static final String ADDED = "added";
     private static final Integer TEST_ID_ONE = 1;
     private static final Integer TEST_ID_ZERO = 0;
-    private static final String ADDED = "added";
     private static final String MASSAGE = "massage";
     private static final String PRODUCT = "product";
     private static final String CATEGORY = "category";
@@ -80,9 +77,6 @@ class ProductControllerTest {
     }
 
     private final MockMvc mockMvc;
-
-    @Mock
-    private Model model;
 
     @Mock
     private MockHttpSession mockHttpSession;

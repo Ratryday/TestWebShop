@@ -12,9 +12,11 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 
+import static com.ratryday.controllers.Constants.*;
+
 @Controller
 @Transactional
-@RequestMapping("/product")
+@RequestMapping(SLASH_PRODUCT)
 public class ProductController {
 
     private final CategoryServices categoryServices;
@@ -28,27 +30,27 @@ public class ProductController {
         this.cartServices = cartServices;
     }
 
-    @GetMapping("/products")
-    public String productList(@RequestParam("categoryId") int categoryId, Model model) {
-        model.addAttribute("category", categoryServices.getCategory(categoryId));
+    @GetMapping(SLASH_PRODUCTS)
+    public String productList(@RequestParam(CATEGORY_ID) int categoryId, Model model) {
+        model.addAttribute(CATEGORY, categoryServices.getCategory(categoryId));
         if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
-            model.addAttribute("massage", "There are no products here.");
-            return "product/products";
+            model.addAttribute(MASSAGE, String.format(MASSAGE_CONTENT, PRODUCTS));
+            return PRODUCT_SLASH_PRODUCTS;
         }
-        model.addAttribute("allProducts", productServices.getProductList(categoryServices.getCategory(categoryId)));
-        return "product/products";
+        model.addAttribute(ALL_PRODUCTS, productServices.getProductList(categoryServices.getCategory(categoryId)));
+        return PRODUCT_SLASH_PRODUCTS;
     }
 
     @GetMapping()
-    public String product(@RequestParam("productId") int productId, Model model, HttpSession httpSession) {
+    public String product(@RequestParam(PRODUCT_ID) int productId, Model model, HttpSession httpSession) {
         if (cartServices.getCart(httpSession) != null) {
             if (cartServices.getCart(httpSession).getCartEntry().stream()
                     .anyMatch(cartEntry -> cartEntry.getProduct().getProductId() == productId)) {
-                model.addAttribute("added", "added");
+                model.addAttribute(ADDED, ADDED);
             }
         }
-        model.addAttribute("product", productServices.getProduct(productId));
-        return "product/product";
+        model.addAttribute(PRODUCT, productServices.getProduct(productId));
+        return PRODUCT_SLASH_PRODUCTS;
     }
 
 }
