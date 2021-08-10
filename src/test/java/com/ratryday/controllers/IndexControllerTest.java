@@ -52,10 +52,10 @@ class IndexControllerTest {
      * */
 
     @Test
-    void indexCategoryServicesReturnNull() throws Exception {
+    void indexCategoryServicesReturnEmptyListOfCategories() throws Exception {
         when(categoryServicesMockBean.getCategoryList()).thenReturn(new ArrayList<>());
 
-        // Test that categoryServices.getCategoryList() return null
+        // Test that categoryServices.getCategoryList() return empty lost of categories
         assertEquals(new ArrayList<>(), categoryServicesMockBean.getCategoryList());
 
         /*

@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -33,6 +34,19 @@ public class Category {
     }
 
     public Category() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category)) return false;
+        Category category = (Category) o;
+        return getCategoryId() == category.getCategoryId() && Objects.equals(getCategoryName(), category.getCategoryName()) && Objects.equals(getProductList(), category.getProductList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCategoryId(), getCategoryName(), getProductList());
     }
 
     @Override

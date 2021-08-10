@@ -1,28 +1,29 @@
 package com.ratryday.controllers;
 
-import com.ratryday.models.CartEntry;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.ratryday.services.CategoryServices;
 import com.ratryday.services.ProductServices;
+import org.apache.commons.lang3.StringUtils;
 import com.ratryday.services.OrderServices;
 import com.ratryday.services.CartServices;
-import com.ratryday.models.Product;
+import com.ratryday.models.CartEntry;
 import com.ratryday.models.Category;
 import org.springframework.ui.Model;
+import com.ratryday.models.Product;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
+import java.io.IOException;
+import javax.validation.Valid;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @Transactional
@@ -46,7 +47,7 @@ public class AdminController {
     }
 
     // Admin layer
-    @PostMapping()
+    @PostMapping("/login")
     public String adminSingIn(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
             model.addAttribute("massage", "There are no categories here.");
@@ -82,8 +83,11 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "admin/category/create";
         }
-        categoryServices.create(category);
-        return "forward:/admin";
+        if (categoryServices.create(category)) {
+            return "forward:/admin";
+        }
+        bindingResult.addError(new FieldError("categoryCreation", "categoryCreation", "Category has not created"));
+        return "admin/category/create";
     }
 
     @GetMapping("/category/edit")
@@ -93,7 +97,7 @@ public class AdminController {
     }
 
     @PostMapping("/category/edit")
-    public String updateCategory(@ModelAttribute("category") @Valid Category category, BindingResult bindingResult) {
+    public String updateCategory(@ModelAttribute("category") @Valid Category category, BindingResult bindingResult, Model model) {
         if (!StringUtils.isEmpty(category.getCategoryName())) {
             if (!categoryServices.getCategory(category.getCategoryId()).getCategoryName().equals(category.getCategoryName())) {
                 if (categoryServices.isExist(category.getCategoryName())) {
@@ -102,18 +106,23 @@ public class AdminController {
                 }
             }
         }
-
         if (bindingResult.hasErrors()) {
             return "admin/category/edit";
         }
-        categoryServices.update(category);
-        return "forward:/admin";
+        if (categoryServices.update(category)) {
+            return "forward:/admin";
+        }
+        model.addAttribute("massage", "Category wasn't be updated");
+        return "admin/category/edit";
     }
 
-    @DeleteMapping("/category/delete")
-    public String deleteCategory(@RequestParam int categoryId) {
-        categoryServices.delete(categoryId);
-        return "forward:/admin";
+    @PostMapping("/category/delete")
+    public String deleteCategory(@RequestParam int categoryId, Model model) {
+        if (categoryServices.delete(categoryId)) {
+            return "forward:/admin";
+        }
+        model.addAttribute("massage", "Category doesn't deleted");
+        return "admin/admin";
     }
 
 
@@ -123,10 +132,10 @@ public class AdminController {
         model.addAttribute("category", categoryServices.getCategory(categoryId));
         if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
             model.addAttribute("massage", "There are no products here.");
-            return "/admin/product/products";
+            return "admin/product/products";
         }
         model.addAttribute("allProducts", productServices.getProductList(categoryServices.getCategory(categoryId)));
-        return "/admin/product/products";
+        return "admin/product/products";
     }
 
     @GetMapping("/product/new")
@@ -139,7 +148,8 @@ public class AdminController {
     public String createProduct(@ModelAttribute("product") @Valid Product product, BindingResult bindingResult,
                                 @RequestParam MultipartFile imageFile, @RequestParam int categoryId, Model model) {
         if (imageFile.isEmpty()) {
-            bindingResult.addError(new FieldError("productImage", "productImage", "You should chose image"));
+            bindingResult.addError(new FieldError("productImage", "productImage",
+                    "You should chose image"));
         }
         if (productServices.isExist(product.getProductName())) {
             bindingResult.addError(new FieldError("productName", "productName",
