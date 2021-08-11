@@ -50,7 +50,7 @@ public class ProductController {
             }
         }
         model.addAttribute(PRODUCT, productServices.getProduct(productId));
-        return PRODUCT_SLASH_PRODUCTS;
+        return PRODUCT_SLASH_PRODUCT;
     }
 
 }

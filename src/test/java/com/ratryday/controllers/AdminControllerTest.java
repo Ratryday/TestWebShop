@@ -8,7 +8,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BindingResult;
 import org.springframework.mock.web.MockHttpSession;

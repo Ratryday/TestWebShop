@@ -61,7 +61,7 @@ public class CartController {
 
     @PostMapping("/delete")
     public String clearCart(@RequestParam int productId, Model model, HttpSession httpSession) {
-        if(cartServices.deleteCartEntry(productServices.getProduct(productId), httpSession)) {
+        if (cartServices.deleteCartEntry(productServices.getProduct(productId), httpSession)) {
             if (cartServices.getCart(httpSession) == null) {
                 model.addAttribute("message", "You do not add anything");
                 return "cart/cart";

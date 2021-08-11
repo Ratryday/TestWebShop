@@ -57,9 +57,9 @@ class ProductControllerTest {
     private static final String SLASH_PRODUCT_SLASH_PRODUCTS = "/product/products";
 
     @BeforeEach
-    void setProductController() {
+    void setUp() {
         testCategory = new Category();
-
+        testCategory.setCategoryName("name");
         testProduct = new Product();
         testProduct.setProductImage("Image");
         testProduct.setCategory(testCategory);
@@ -150,9 +150,11 @@ class ProductControllerTest {
 
         // Check that cartServices.getCart() return null
         when(cartServicesMockBean.getCart(mockHttpSession)).thenReturn(null);
+        
         assertNull(cartServicesMockBean.getCart(mockHttpSession));
 
-        mockMvc.perform(get(SLASH_PRODUCT).param(PRODUCT_ID, String.valueOf(TEST_ID_ZERO))
+        mockMvc.perform(get(SLASH_PRODUCT)
+                        .param(PRODUCT_ID, String.valueOf(TEST_ID_ZERO))
                         .session(mockHttpSession))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PRODUCT_PRODUCT))
@@ -197,7 +199,8 @@ class ProductControllerTest {
 
         assertTrue(cartEntryList.stream().anyMatch(cartEntry -> cartEntry.getProduct().getProductId() == TEST_ID_ZERO));
 
-        mockMvc.perform(get(SLASH_PRODUCT).param(PRODUCT_ID, String.valueOf(TEST_ID_ZERO))
+        mockMvc.perform(get(SLASH_PRODUCT)
+                        .param(PRODUCT_ID, String.valueOf(TEST_ID_ZERO))
                         .session(mockHttpSession))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PRODUCT_PRODUCT))

@@ -74,4 +74,17 @@ public class Product implements java.io.Serializable {
     public int hashCode() {
         return Objects.hash(productId, productPrice, productName, productImage, productDescription, category, cartEntry);
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", productPrice=" + productPrice +
+                ", productName='" + productName + '\'' +
+                ", productImage='" + productImage + '\'' +
+                ", productDescription='" + productDescription + '\'' +
+                ", category=" + category +
+                ", cartEntry=" + cartEntry +
+                '}';
+    }
 }
