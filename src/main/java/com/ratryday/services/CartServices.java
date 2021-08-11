@@ -26,22 +26,20 @@ public class CartServices {
 
     public boolean create(int productCount, Product product, HttpSession httpSession) {
         if (cartDao.insert(httpSession)) {
-            cartEntryDao.insert(new CartEntry(productCount, cartDao.selectOne(httpSession), product));
-            return true;
+            return cartEntryDao.insert(new CartEntry(productCount, cartDao.selectOne(httpSession), product));
         }
         return false;
     }
 
     public boolean delete(Cart cart) {
         if (cartEntryDao.delete(cart.getCartEntry())) {
-            cartDao.delete(cart);
-            return true;
+            return cartDao.delete(cart);
         }
         return false;
     }
+
     public boolean deleteCartEntry(Product product, HttpSession httpSession) {
-        cartEntryDao.delete(product, cartDao.selectOne(httpSession));
-        return true;
+        return cartEntryDao.delete(product, cartDao.selectOne(httpSession));
     }
 
     public boolean update() {
