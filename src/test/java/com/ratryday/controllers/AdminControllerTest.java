@@ -1,14 +1,12 @@
 package com.ratryday.controllers;
 
-import com.alibaba.fastjson.JSONObject;
-import com.mysql.cj.util.TestUtils;
+
 import com.ratryday.models.Category;
 import com.ratryday.models.Product;
 import com.ratryday.services.CartServices;
 import com.ratryday.services.CategoryServices;
 import com.ratryday.services.OrderServices;
 import com.ratryday.services.ProductServices;
-import net.minidev.json.JSONUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.WebApplicationContext;
@@ -414,7 +411,7 @@ class AdminControllerTest {
         MockMvc mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mvc.perform(multipart("/admin/product")
                         .file("imageFile", null)
-                        .param("product", "")
+                        .flashAttr("product", new Product())
                         .param("categoryId", String.valueOf(testId)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("categoryId", testId))
@@ -431,7 +428,7 @@ class AdminControllerTest {
         MockMvc mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mvc.perform(multipart("/admin/product", testProduct)
                         .file(multipartFileMock)
-                        .content(JSONObject.toJSONString(testProduct))
+                        .flashAttr("product", testProduct)
                         .param("categoryId", String.valueOf(testId)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("categoryId", testId))
