@@ -34,7 +34,7 @@ public class ProductController {
     public String productList(@RequestParam(CATEGORY_ID) int categoryId, Model model) {
         model.addAttribute(CATEGORY, categoryServices.getCategory(categoryId));
         if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
-            model.addAttribute(MASSAGE, String.format(MASSAGE_CONTENT, PRODUCTS));
+            model.addAttribute(message, String.format(message_CONTENT, PRODUCTS));
             return PRODUCT_SLASH_PRODUCTS;
         }
         model.addAttribute(ALL_PRODUCTS, productServices.getProductList(categoryServices.getCategory(categoryId)));

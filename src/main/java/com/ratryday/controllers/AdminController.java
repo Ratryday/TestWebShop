@@ -50,7 +50,7 @@ public class AdminController {
     @PostMapping("/login")
     public String adminSingIn(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
-            model.addAttribute("massage", "There are no categories here.");
+            model.addAttribute("message", "There are no categories here.");
             return "admin/admin";
         }
         model.addAttribute("allCategory", categoryServices.getCategoryList());
@@ -112,7 +112,7 @@ public class AdminController {
         if (categoryServices.update(category)) {
             return "forward:/admin";
         }
-        model.addAttribute("massage", "Category wasn't be updated");
+        model.addAttribute("message", "Category wasn't be updated");
         return "admin/category/edit";
     }
 
@@ -121,7 +121,7 @@ public class AdminController {
         if (categoryServices.delete(categoryId)) {
             return "forward:/admin";
         }
-        model.addAttribute("massage", "Category doesn't deleted");
+        model.addAttribute("message", "Category doesn't deleted");
         return "admin/admin";
     }
 
@@ -131,7 +131,7 @@ public class AdminController {
     public String productList(@RequestParam int categoryId, Model model) {
         model.addAttribute("category", categoryServices.getCategory(categoryId));
         if (CollectionUtils.isEmpty(productServices.getProductList(categoryServices.getCategory(categoryId)))) {
-            model.addAttribute("massage", "There are no products here.");
+            model.addAttribute("message", "There are no products here.");
             return "admin/product/products";
         }
         model.addAttribute("allProducts", productServices.getProductList(categoryServices.getCategory(categoryId)));
@@ -203,10 +203,13 @@ public class AdminController {
         return "redirect:/admin/product/products";
     }
 
-    @DeleteMapping("/product/delete")
+    @PostMapping("/product/delete")
     public String deleteProduct(@RequestParam int categoryId, @RequestParam int productId, Model model) {
-        productServices.delete(productId);
-        model.addAttribute("categoryId", categoryId);
+        if(productServices.delete(productId)) {
+            model.addAttribute("categoryId", categoryId);
+            return "redirect:/admin/product/products";
+        }
+        model.addAttribute("message", "Product doesn't deleted");
         return "redirect:/admin/product/products";
     }
 
@@ -225,15 +228,15 @@ public class AdminController {
         return "admin/cart/cartEntry";
     }
 
-    @DeleteMapping("/cart/delete")
+    @PostMapping("/cart/delete")
     public String deleteCartEntryProduct(@RequestParam int productId, @RequestParam int cartId, Model model,
                                          HttpSession httpSession) {
         if (cartServices.deleteCartEntry(productServices.getProduct(productId), httpSession)) {
-            model.addAttribute("cart", cartServices.getCart(cartId));
-            return "/admin/cart/cartEntry";
+            model.addAttribute("cart", cartServices.getCart(cartId).getCartEntry());
+            return "admin/cart/cartEntry";
         }
         model.addAttribute("message", "Fail deleting");
-        return "/admin/cart/cartEntry";
+        return "admin/cart/cartEntry";
     }
 
 }

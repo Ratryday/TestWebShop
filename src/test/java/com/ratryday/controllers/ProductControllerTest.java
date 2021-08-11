@@ -44,7 +44,7 @@ class ProductControllerTest {
     private static final String ADDED = "added";
     private static final Integer TEST_ID_ONE = 1;
     private static final Integer TEST_ID_ZERO = 0;
-    private static final String MASSAGE = "massage";
+    private static final String message = "message";
     private static final String PRODUCT = "product";
     private static final String CATEGORY = "category";
     private static final String PRODUCT_ID = "productId";
@@ -53,7 +53,7 @@ class ProductControllerTest {
     private static final String ALL_PRODUCTS = "allProducts";
     private static final String PRODUCT_PRODUCT = "product/product";
     private static final String PRODUCT_PRODUCTS = "product/products";
-    private static final String MASSAGE_CONTENT = "There are no products here.";
+    private static final String message_CONTENT = "There are no products here.";
     private static final String SLASH_PRODUCT_SLASH_PRODUCTS = "/product/products";
 
     @BeforeEach
@@ -110,7 +110,7 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(PRODUCT_PRODUCTS))
                 .andExpect(model().attribute(CATEGORY, categoryServicesMockBean.getCategory(TEST_ID_ZERO)))
-                .andExpect(model().attribute(MASSAGE, equalTo(MASSAGE_CONTENT)));
+                .andExpect(model().attribute(message, equalTo(message_CONTENT)));
     }
 
     @Spy

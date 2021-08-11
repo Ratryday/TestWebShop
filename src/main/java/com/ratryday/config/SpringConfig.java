@@ -61,7 +61,7 @@ public class SpringConfig implements WebMvcConfigurer {
                 .addResourceHandler("/images/**").addResourceLocations("/WEB-INF/images/");
     }
 
-   /* public void addViewControllers(ViewControllerRegistry registry) {
+    /* public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/admin/admin").setViewName("admin/admin");
         registry.addViewController("/admin/login").setViewName("admin/login");

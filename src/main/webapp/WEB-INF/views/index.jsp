@@ -5,7 +5,7 @@
 </head>
 <body>
 <h2>My Web Shop</h2>
-<p th:text="${massage}"></p>
+<p th:text="${message}"></p>
 <table>
     <tr>
         <th>Categories</th>

@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Admin Panel</h2>
-<p th:text="${massage}"></p>
+<p th:text="${message}"></p>
 <div>
     <form action="/logout" method="post">
             <input type="submit" value="Sign Out"/>

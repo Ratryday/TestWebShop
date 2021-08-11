@@ -5,7 +5,7 @@
 </head>
 <body>
 <h2>Product list admin panel</h2>
-<p th:text="${massage}"></p>
+<p th:text="${message}"></p>
 <div>
     <form method="get" action="/admin/product/new">
         <input type="hidden" name="categoryId" th:value="${category.categoryId}">

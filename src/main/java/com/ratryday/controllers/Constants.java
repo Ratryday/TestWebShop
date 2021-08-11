@@ -7,8 +7,8 @@ public class Constants {
    public static final String YOUR_MAIL_ADDRESS = "yourMailAddress@gmail.com";
 
    // Controllers
-   public static final String MASSAGE= "massage";
-   public static final String MASSAGE_CONTENT = "There are no %s here.";
+   public static final String message= "message";
+   public static final String message_CONTENT = "There are no %s here.";
 
    // IndexController
    public static final String INDEX = "index";

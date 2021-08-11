@@ -24,7 +24,7 @@ public class IndexController {
     @GetMapping
     public String index(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
-            model.addAttribute(MASSAGE, String.format(MASSAGE_CONTENT, CATEGORIES));
+            model.addAttribute(message, String.format(message_CONTENT, CATEGORIES));
             return INDEX;
         }
         model.addAttribute(ALL_CATEGORIES, categoryServices.getCategoryList());

@@ -31,9 +31,9 @@ class IndexControllerTest {
 
     private static final String SLASH = "/";
     private static final String INDEX = "index";
-    private static final String MASSAGE = "massage";
+    private static final String message = "message";
     private static final String ALL_CATEGORY = "allCategory";
-    private static final String MASSAGE_CONTENT = "There are no categories here.";
+    private static final String message_CONTENT = "There are no categories here.";
 
     private final MockMvc mockMvc;
 
@@ -65,7 +65,7 @@ class IndexControllerTest {
         mockMvc.perform(get(SLASH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(INDEX))
-                .andExpect(model().attribute(MASSAGE, equalTo(MASSAGE_CONTENT)));
+                .andExpect(model().attribute(message, equalTo(message_CONTENT)));
     }
 
     @Spy
