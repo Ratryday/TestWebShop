@@ -1,7 +1,7 @@
 package com.ratryday.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.junit.jupiter.api.BeforeEach;
 import com.ratryday.dao.CategoryDao;
 import com.ratryday.models.Category;
 import org.junit.jupiter.api.Test;
@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 
 /**
- * {@link CategoryServices}  must create, update, check if exist, delete and return one or list of Category
+ * {@link CategoryServices}  must create, update, check if existed, delete and return one or list of Category
  */
 
 @WebMvcTest(CategoryServices.class)
@@ -30,7 +30,7 @@ class CategoryServicesTest {
     private static final String TEST_STRING = "Test";
 
     @Mock
-    private CategoryDao categoryDao;
+    private CategoryDao categoryDaoMock;
 
     @InjectMocks
     private CategoryServices categoryServices;
@@ -62,14 +62,14 @@ class CategoryServicesTest {
     void createPassCategoryToCategoryDao() {
         categoryServices.create(testCategory);
 
-        verify(categoryDao).insert(categoryArgumentCaptor.capture());
+        verify(categoryDaoMock).insert(categoryArgumentCaptor.capture());
 
         assertThat(categoryArgumentCaptor.getValue(), is(testCategory));
     }
 
     @Test
     void createReturnTrueIfCategoryDaoReturnTrue() {
-        when(categoryDao.insert(testCategory)).thenReturn(true);
+        when(categoryDaoMock.insert(testCategory)).thenReturn(true);
 
         // categoryServices.create(Category) return true if categoryDao.insert(Category) return true
         assertTrue(categoryServices.create(testCategory));
@@ -77,7 +77,7 @@ class CategoryServicesTest {
 
     @Test
     void createReturnFalseIfCategoryDaoReturnFalse() {
-        when(categoryDao.insert(testCategory)).thenReturn(false);
+        when(categoryDaoMock.insert(testCategory)).thenReturn(false);
 
         // categoryServices.create(Category) return false if categoryDao.insert(Category) return false
         assertFalse(categoryServices.create(testCategory));
@@ -94,14 +94,14 @@ class CategoryServicesTest {
     void updatePassCategoryToCategoryDao() {
         categoryServices.update(testCategory);
 
-        verify(categoryDao).update(categoryArgumentCaptor.capture());
+        verify(categoryDaoMock).update(categoryArgumentCaptor.capture());
 
         assertThat(categoryArgumentCaptor.getValue(), is(testCategory));
     }
 
     @Test
     void updateReturnTrueIfCategoryDaoReturnTrue() {
-        when(categoryDao.insert(testCategory)).thenReturn(true);
+        when(categoryDaoMock.insert(testCategory)).thenReturn(true);
 
         // categoryServices.update(Category) return true if categoryDao.update(Category) return true
         assertTrue(categoryServices.create(testCategory));
@@ -109,7 +109,7 @@ class CategoryServicesTest {
 
     @Test
     void updateReturnFalseIfCategoryDaoReturnFalse() {
-        when(categoryDao.update(testCategory)).thenReturn(false);
+        when(categoryDaoMock.update(testCategory)).thenReturn(false);
 
         // categoryServices.update(Category) return false if categoryDao.update(Category) return false
         assertFalse(categoryServices.update(testCategory));
@@ -126,14 +126,14 @@ class CategoryServicesTest {
     void isExistPassCategoryToCategoryDao() {
         categoryServices.isExist(TEST_STRING);
 
-        verify(categoryDao).selectOne(stringArgumentCaptor.capture());
+        verify(categoryDaoMock).selectOne(stringArgumentCaptor.capture());
 
         assertEquals(stringArgumentCaptor.getValue(), TEST_STRING);
     }
 
     @Test
     void isExistReturnTrueIfCategoryDaoReturnTrue() {
-        when(categoryDao.selectOne(TEST_STRING)).thenReturn(true);
+        when(categoryDaoMock.selectOne(TEST_STRING)).thenReturn(true);
 
         // categoryServices.isExist(String) return true if categoryDao.selectOne(String) return true
         assertTrue(categoryServices.isExist(TEST_STRING));
@@ -141,7 +141,7 @@ class CategoryServicesTest {
 
     @Test
     void isExistReturnFalseIfCategoryDaoReturnFalse() {
-        when(categoryDao.selectOne(TEST_STRING)).thenReturn(false);
+        when(categoryDaoMock.selectOne(TEST_STRING)).thenReturn(false);
 
         // categoryServices.isExist(String) return false if categoryDao.selectOne(String) return false
         assertFalse(categoryServices.isExist(TEST_STRING));
@@ -158,14 +158,14 @@ class CategoryServicesTest {
     void deletePassCategoryToCategoryDao() {
         categoryServices.delete(testInteger);
 
-        verify(categoryDao).delete(integerArgumentCaptor.capture());
+        verify(categoryDaoMock).delete(integerArgumentCaptor.capture());
 
         assertEquals(integerArgumentCaptor.getValue(), testInteger);
     }
 
     @Test
     void deleteReturnTrueIfCategoryDaoReturnTrue() {
-        when(categoryDao.selectOne(TEST_STRING)).thenReturn(true);
+        when(categoryDaoMock.selectOne(TEST_STRING)).thenReturn(true);
 
         // categoryServices.delete(Integer) return true if categoryDao.delete(Integer) return true
         assertTrue(categoryServices.isExist(TEST_STRING));
@@ -173,7 +173,7 @@ class CategoryServicesTest {
 
     @Test
     void deleteReturnFalseIfCategoryDaoReturnFalse() {
-        when(categoryDao.delete(testInteger)).thenReturn(false);
+        when(categoryDaoMock.delete(testInteger)).thenReturn(false);
 
         // categoryServices.delete(Integer) return false if categoryDao.delete(Integer) return false
         assertFalse(categoryServices.delete(testInteger));
@@ -190,14 +190,14 @@ class CategoryServicesTest {
     void getCategoryPassCategoryToCategoryDao() {
         categoryServices.getCategory(testInteger);
 
-        verify(categoryDao).selectOne(integerArgumentCaptor.capture());
+        verify(categoryDaoMock).selectOne(integerArgumentCaptor.capture());
 
         assertEquals(integerArgumentCaptor.getValue(), new Category(testInteger, anyString()).getCategoryId());
     }
 
     @Test
     void getCategoryReturnCategoryIfCategoryDaoReturnCategory() {
-        when(categoryDao.selectOne(testInteger)).thenReturn(testCategory);
+        when(categoryDaoMock.selectOne(testInteger)).thenReturn(testCategory);
 
         // categoryServices.getCategory(Integer) return Category if categoryDao.selectOne(Integer) return Category
         assertThat(categoryServices.getCategory(testInteger), is(testCategory));
@@ -205,7 +205,7 @@ class CategoryServicesTest {
 
     @Test
     void getCategoryReturnNullIfCategoryDaoReturnNull() {
-        when(categoryDao.selectOne(testInteger)).thenReturn(null);
+        when(categoryDaoMock.selectOne(testInteger)).thenReturn(null);
 
         // categoryServices.getCategory(Integer) return null if categoryDao.selectOne(Integer) return null
         assertNull(categoryServices.getCategory(testInteger));
@@ -223,7 +223,7 @@ class CategoryServicesTest {
 
     @Test
     void getCategoryListReturnListOfCategoriesIfCategoryDaoReturnListOfCategories() {
-        when(categoryDao.select()).thenReturn(testCategoryList);
+        when(categoryDaoMock.select()).thenReturn(testCategoryList);
 
         assertThat(categoryServices.getCategoryList(), is(testCategoryList));
     }

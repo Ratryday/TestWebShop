@@ -1,12 +1,12 @@
 package com.ratryday.services;
 
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Component;
 import com.ratryday.dao.OrderDao;
 import com.ratryday.models.Order;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,8 +33,7 @@ public class OrderServices {
     }
 
     public boolean save(Order order){
-        orderDao.insert(order);
-        return true;
+        return orderDao.insert(order);
     }
 
     public List<Order> getOrderList(){
