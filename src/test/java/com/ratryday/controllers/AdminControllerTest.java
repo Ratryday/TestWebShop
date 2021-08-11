@@ -47,7 +47,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AdminController.class)
-@Import(Category.class)
 class AdminControllerTest {
 
     @Mock

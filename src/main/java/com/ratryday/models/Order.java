@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -54,5 +55,19 @@ public class Order {
     }
 
     public Order() {
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order order = (Order) o;
+        return getOrderId() == order.getOrderId() && Objects.equals(getPhoneNumber(), order.getPhoneNumber()) && Objects.equals(getMailAddress(), order.getMailAddress()) && Objects.equals(getCustomerName(), order.getCustomerName()) && Objects.equals(getCustomerSurname(), order.getCustomerSurname()) && Objects.equals(getCart(), order.getCart());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getOrderId(), getPhoneNumber(), getMailAddress(), getCustomerName(), getCustomerSurname(), getCart());
     }
 }
