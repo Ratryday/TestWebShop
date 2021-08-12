@@ -33,6 +33,7 @@ class CartControllerTest {
 
     private Cart testCart;
     private Category testCategory;
+    private List<CartEntry> cartEntryList;
     private Product testProduct;
     private BigDecimal totalProductPrice;
     private int productCount;
@@ -60,17 +61,17 @@ class CartControllerTest {
     @BeforeEach
     void setUp() {
         testCart = new Cart();
-        List<CartEntry> cartEntryList = new ArrayList<>();
+        cartEntryList = new ArrayList<>();
         CartEntry cartEntry = new CartEntry();
         productCount = 1;
         testCategory = new Category();
         id = 0;
-        cartEntry.setProductCount(productCount);
-        testProduct = new Product(new BigDecimal(1.1), "name", "image",
+        testProduct = new Product(new BigDecimal(2.1), "name", "image",
                 "description", testCategory);
-        testProduct.setProductPrice(new BigDecimal(1));
+        cartEntry.setProduct(testProduct);
+        cartEntry.setProductCount(productCount);
         cartEntryList.add(cartEntry);
-        testCart.setCartEntry(new ArrayList<>());
+        testCart.setCartEntry(cartEntryList);
     }
 
     @Test
@@ -79,7 +80,8 @@ class CartControllerTest {
 
         assertNull(cartServicesMockBean.getCart(mockHttpSession));
 
-        mockMvc.perform(get("/cart"))
+        mockMvc.perform(get("/cart")
+                        .session(mockHttpSession))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cart/cart"))
                 .andExpect(model().attribute("message", "You do not add anything"));
@@ -87,12 +89,15 @@ class CartControllerTest {
 
     @Test
     void cartIfCartServicesGetCartGetCartEntryReturnEmptyList() throws Exception {
-        when(cartServicesMockBean.getCart(mockHttpSession)).thenReturn(testCart);
+        Cart emptyCart = new Cart();
+        emptyCart.setCartEntry(new ArrayList<>());
+        when(cartServicesMockBean.getCart(mockHttpSession)).thenReturn(emptyCart);
 
         assertNotNull(cartServicesMockBean.getCart(mockHttpSession));
         assertEquals(cartServicesMockBean.getCart(mockHttpSession).getCartEntry(), new ArrayList<>());
 
-        mockMvc.perform(get("/cart"))
+        mockMvc.perform(get("/cart")
+                        .session(mockHttpSession))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cart/cart"))
                 .andExpect(model().attribute("message", "You do not add anything"));
@@ -103,13 +108,21 @@ class CartControllerTest {
         when(cartServicesMockBean.getCart(mockHttpSession)).thenReturn(testCart);
 
         assertNotNull(cartServicesMockBean.getCart(mockHttpSession));
-        assertEquals(cartServicesMockBean.getCart(mockHttpSession).getCartEntry(), new ArrayList<>());
+        assertEquals(cartServicesMockBean.getCart(mockHttpSession).getCartEntry(), cartEntryList);
 
-        mockMvc.perform(get("/cart"))
+        BigDecimal totalProductPrice = BigDecimal.ZERO;
+        for (CartEntry cartEntry : cartEntryList) {
+            BigDecimal productPrice = cartEntry.getProduct().getProductPrice();
+            int productCount = cartEntry.getProductCount();
+            totalProductPrice = totalProductPrice.add(productPrice.multiply(new BigDecimal(productCount)));
+        }
+
+        mockMvc.perform(get("/cart")
+                        .session(mockHttpSession))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cart/cart"))
-                .andExpect(model().attribute("totalProductPrice", (Object) null))
-                .andExpect(model().attribute("cart", (Object) null));
+                .andExpect(model().attribute("totalProductPrice", totalProductPrice))
+                .andExpect(model().attribute("cart", cartEntryList));
     }
 
     @Test
