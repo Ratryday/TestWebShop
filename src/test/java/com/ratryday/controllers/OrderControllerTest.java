@@ -1,6 +1,11 @@
 package com.ratryday.controllers;
 
+import com.ratryday.dao.OrderDao;
+import com.ratryday.services.OrderServices;
+import org.mockito.Spy;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
@@ -14,8 +19,9 @@ import com.ratryday.dao.CartDao;
 import com.ratryday.models.Cart;
 import org.mockito.Mock;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,6 +31,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class OrderControllerTest {
 
     private Order testOrder;
+
+    @MockBean
+    private OrderServices orderServicesMockBean;
 
     @Mock
     private MockHttpSession mockHttpSession;
@@ -62,16 +71,27 @@ class OrderControllerTest {
 
         assertTrue(bindingResultMock.hasErrors());
 
-        Order newOrder = new Order();
         mockMvc.perform(post("/order/buy")
-                        .flashAttr("order", newOrder))
+                        .flashAttr("order", new Order()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("order/order"));
     }
 
+    @Spy
+    private OrderServices orderServices;
+    {
+        JavaMailSender javaMailSender = mock(JavaMailSender.class);
+        OrderDao orderDao = mock(OrderDao.class);
+        orderServices = new OrderServices(javaMailSender, orderDao);
+    }
+
+
+
     @Test
     void buyWhenOrderIsValid() throws Exception {
         when(bindingResultMock.hasErrors()).thenReturn(false);
+
+        doNothing().when(orderServices).sendSimpleMessage(anyString(),anyString(),anyString());
 
         assertFalse(bindingResultMock.hasErrors());
 

@@ -192,7 +192,7 @@ class CategoryServicesTest {
 
         verify(categoryDaoMock).selectOne(integerArgumentCaptor.capture());
 
-        assertEquals(integerArgumentCaptor.getValue(), new Category(testInteger, anyString()).getCategoryId());
+        assertEquals(integerArgumentCaptor.getValue(), new Category(testInteger, "anyString()").getCategoryId());
     }
 
     @Test

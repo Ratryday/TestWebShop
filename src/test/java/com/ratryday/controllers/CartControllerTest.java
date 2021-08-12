@@ -9,6 +9,7 @@ import com.ratryday.services.ProductServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,6 +43,9 @@ class CartControllerTest {
 
     @MockBean
     private ProductServices productServicesMockBean;
+
+    @InjectMocks
+    private CartController cartController;
 
     @Mock
     private MockHttpSession mockHttpSession;
@@ -85,6 +89,7 @@ class CartControllerTest {
     void cartIfCartServicesGetCartGetCartEntryReturnEmptyList() throws Exception {
         when(cartServicesMockBean.getCart(mockHttpSession)).thenReturn(testCart);
 
+        assertNotNull(cartServicesMockBean.getCart(mockHttpSession));
         assertEquals(cartServicesMockBean.getCart(mockHttpSession).getCartEntry(), new ArrayList<>());
 
         mockMvc.perform(get("/cart"))
