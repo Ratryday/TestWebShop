@@ -111,13 +111,13 @@ class AdminControllerTest {
 
     // Admin layer
     /*
-     * Method adminSingIn() is responsible for load admin.jsp page if user successfully sing in to admin panel.
+     * Method adminLogin() is responsible for load admin.jsp page if user successfully sing in to admin panel.
      * For it, I must test:
      * - what addAttribute will add to model when categoryServices return empty list / list of categories
      * - does it return the correct view name as a String
      * */
     @Test
-    void adminSingInCategoryServicesReturnEmptyListOfCategories() throws Exception {
+    void adminLoginCategoryServicesReturnEmptyListOfCategories() throws Exception {
         when(categoryServicesMockBean.getCategoryList()).thenReturn(new ArrayList<>());
 
         // Test that categoryServices.getCategoryList() return empty lost of categories
@@ -141,7 +141,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void adminSingInCategoryServicesReturnListOfCategories() throws Exception {
+    void adminLoginCategoryServicesReturnListOfCategories() throws Exception {
         when(categoryServicesMockBean.getCategoryList()).thenReturn(spyListOfCategories);
 
         // test that categoryServices.getCategoryList() return list of categories
@@ -155,30 +155,6 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/admin"))
                 .andExpect(model().attribute("allCategory", categoryServicesMockBean.getCategoryList()));
-    }
-
-    /*
-     * Method logout() needed only for correct work of Spring Security.
-     * When user try to log out Spring Security using this method take away admin role from user.
-     * It only purposes redirect to IndexController
-     * */
-    @Test
-    void logout() throws Exception {
-        mockMvc.perform(post("/admin/logout"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
-    }
-
-    /*
-     * Method adminLogin() needed only for correct work of Spring Security.
-     * When user try to log in Spring Security using this method give user admin role.
-     * It only purposes redirect to adminSingIn()
-     * */
-    @Test
-    void adminLogin() throws Exception {
-        mockMvc.perform(get("/admin"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/login"));
     }
 
     // Category layer

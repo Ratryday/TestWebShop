@@ -35,7 +35,7 @@
         </tr>
     </div>
 </table>
-<form method="post" action="/admin">
+<form method="get" action="/admin">
     <input type="submit" value="Back to category list"/>
 </form>
 </body>

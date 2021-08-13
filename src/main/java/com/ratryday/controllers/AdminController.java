@@ -2,7 +2,6 @@ package com.ratryday.controllers;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.validation.BindingResult;
@@ -47,24 +46,14 @@ public class AdminController {
     }
 
     // Admin layer
-    @PostMapping("/login")
-    public String adminSingIn(Model model) {
+    @GetMapping
+    public String adminLogin(Model model) {
         if (CollectionUtils.isEmpty(categoryServices.getCategoryList())) {
             model.addAttribute("message", "There are no categories here.");
             return "admin/admin";
         }
         model.addAttribute("allCategory", categoryServices.getCategoryList());
         return "admin/admin";
-    }
-
-    @PostMapping("/logout")
-    public String logout() {
-        return "index";
-    }
-
-    @GetMapping()
-    public String adminLogin() {
-        return "admin/login";
     }
 
 

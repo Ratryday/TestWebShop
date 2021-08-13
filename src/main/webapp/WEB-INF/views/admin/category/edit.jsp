@@ -14,7 +14,7 @@
         <input type="submit" value="Edit">
     </form>
 </div>
-<form method="post" action="/admin">
+<form method="get" action="/admin">
     <input type="submit" value="Back to category list"/>
 </form>
 </body>

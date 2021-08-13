@@ -21,7 +21,7 @@
             </td>
         </tr>
     </div>
-    <form method="post" action="/admin" style="display:inline;">
+    <form method="get" action="/admin" style="display:inline;">
         <input type="submit" value="Back">
     </form>
 </table>
